@@ -1,0 +1,120 @@
+import React from 'react';
+import { View, Image, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
+import Color from '../constants/index';
+
+interface PrimaryCardProps {
+    children: React.ReactNode;
+    onPress: () => void;
+    onClickTouchable: () => void;
+    time: string;
+    bool: boolean;
+    img: any;
+    user: number;
+}
+
+const CardNews: React.FC<PrimaryCardProps> = ({ children, onPress, onClickTouchable, time, img, user }) => {
+    var iconPath = '../assets/icon/';
+    return (
+        <View style={styles.container}>
+            <Pressable style={styles.card} android_ripple={{ color: 'red' }} onPress={onPress} >
+                <View style={styles.cardContent}>
+                    <Text numberOfLines={3} style={styles.textContent} >
+                        {children}
+                    </Text>
+                    <View style={styles.cardFooter}>
+                        <Text style={styles.textTimestamp}>{time}</Text>
+                        {user === 1 && (
+                            <TouchableOpacity onPress={onClickTouchable}>
+                                <Image
+                                    source={require(iconPath + 'bookmark.png')}
+                                    style={styles.icon}
+                                />
+                            </TouchableOpacity>
+                        )}
+                        {user === 2 && (
+                            <TouchableOpacity onPress={onClickTouchable}>
+                                <Image
+                                    source={require(iconPath + 'bookmar.png')}
+                                    style={styles.icon}
+                                />
+                            </TouchableOpacity>
+                        )}
+                        {user === 3 && (
+                            <TouchableOpacity onPress={onClickTouchable}>
+                                <Image
+                                    source={require(iconPath + 'delete.png')}
+                                    style={styles.icon}
+                                />
+                            </TouchableOpacity>
+                        )}
+                        {user === 4 && (
+                            <>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <TouchableOpacity onPress={onClickTouchable}>
+                                        <Image
+                                            source={require(iconPath + 'wrench.png')}
+                                            style={styles.icon}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={onClickTouchable}>
+                                        <Image
+                                            source={require(iconPath + 'delete.png')}
+                                            style={[styles.icon, { marginLeft: 20 }]}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            </>
+                        )}
+                    </View>
+                </View>
+                <Image
+                    source={{ uri: img }}
+                    style={styles.image}
+                />
+            </Pressable>
+        </View>
+    );
+};
+const styles = StyleSheet.create({
+    container: {
+        marginTop: 35,
+    },
+    card: {
+        flexDirection: 'row-reverse',
+        backgroundColor: Color.ui_grey_10,
+        height: 110,
+        width: "100%",
+        borderRadius: 10,
+    },
+    cardContent: {
+        flex: 1,
+        padding: 10,
+    },
+    textContent: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 16,
+        color: Color.ui_black_10,
+    },
+    cardFooter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    textTimestamp: {
+        fontSize: 12,
+        color: Color.ui_grey_20,
+        fontWeight: 'bold',
+    },
+    image: {
+        width: 150,
+        height: 100,
+        borderRadius: 10,
+        marginTop: -35,
+    },
+    icon: {
+        width: 20,
+        height: 20,
+    }
+});
+
+export default CardNews;
