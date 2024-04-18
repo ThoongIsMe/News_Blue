@@ -3,36 +3,38 @@ import { Dimensions, StatusBar } from "react-native";
 
 //vd mẫu
 
-export const bottombarHeight =
+const bottombarHeight =
     Dimensions.get("screen").height == Dimensions.get("window").height ?
     Dimensions.get("screen").height -
     Dimensions.get("window").height +
     StatusBar.currentHeight :
     StatusBar.currentHeight;
 
-export const Colors = {
-    //UI Neutrals
-    ui_grey_05: "#F2F2F2",
-    ui_grey_10: "#E4E4E3",
-    ui_grey_20: "#CBCACA",
-    ui_grey_50: "#888888",
-    ui_grey_70: "#4D4C4C",
-    ui_grey_80: "#333333",
-    ui_grey_90: "#161616",
+const Colors = {
+    //UI 
+    ui_blue_10: "#0380BD",
+
+
+    ui_grey_10: "#F2F2F2",
+    ui_grey_20: "#737373",
+    ui_red_10: "#DF0029",
+    ui_yellow_10: "#D59B00",
+    ui_black_10: "#000000",
+    ui_white_10: "#FFFFFF",
 
     // background
-    ui_light_selected_bg: "#E7F5FF",
+    ui_light_selected_bg: "#FFFFFF",
 };
-export const Fonts = {
-    regular: "Montserrat-Regular",
-    light: "Montserrat-Light",
-    medium: "Montserrat-Medium",
-    bold: "Montserrat-Regular",
+const Fonts = {
+
+
 };
 
-export const Images = {};
 
-export const Icons = {};
+
+
+
+export default Colors;
 
 ///https://github.com/Rushit013/RNProjectStructure/blob/main/src/utils/index.js
 ///https://dev.to/rushitjivani/ultimate-folder-structure-for-your-react-native-project-1k27
