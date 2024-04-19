@@ -6,13 +6,14 @@ interface PrimaryCardProps {
     children: React.ReactNode;
     onPress: () => void;
     onClickTouchable: () => void;
+    onClickTouchableDelete?: () => void;
     time: string;
     bool: boolean;
     img: any;
     user: number;
 }
 
-const CardNews: React.FC<PrimaryCardProps> = ({ children, onPress, onClickTouchable, time, img, user }) => {
+const CardNews: React.FC<PrimaryCardProps> = ({ children, onPress, onClickTouchable, time, img, user, onClickTouchableDelete }) => {
     var iconPath = '../assets/icon/';
     return (
         <View style={styles.container}>
@@ -56,7 +57,7 @@ const CardNews: React.FC<PrimaryCardProps> = ({ children, onPress, onClickToucha
                                             style={styles.icon}
                                         />
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={onClickTouchable}>
+                                    <TouchableOpacity onPress={onClickTouchableDelete}>
                                         <Image
                                             source={require(iconPath + 'delete.png')}
                                             style={[styles.icon, { marginLeft: 20 }]}

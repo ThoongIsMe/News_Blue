@@ -43,15 +43,6 @@ function ScreemRegister(): React.ReactElement {
             keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}>
             <ScrollView>
                 <Container>
-                    <TouchableOpacity>
-                        <Image
-                            source={require('../../assets/icon/left-arrow.png')}
-                            style={styles.imgleftArrow}
-                        />
-
-                    </TouchableOpacity>
-
-
                     <View style={styles.img}>
                         <Image
                             source={require('../../assets/images/logoNews.jpg')}

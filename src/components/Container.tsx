@@ -14,7 +14,9 @@ const Container = ({ children }: Container) => {
 
 const styles = StyleSheet.create({
     container: {
-        margin: 18,
+        padding: 18,
+        flex: 1,
+        backgroundColor: '#fff',
     },
 });
 
