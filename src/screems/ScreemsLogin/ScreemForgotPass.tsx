@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Color from '../../constants/index'
+import Color from '../../constants/index';
 import InputText from '../../components/InputText';
 import PrimaryButton from '../../components/PrimaryButton';
 import Container from '../../components/Container';
@@ -18,14 +18,6 @@ function ScreemForgotPass(): React.ReactElement {
     return (
 
         <Container>
-            <TouchableOpacity>
-                <Image
-                    source={require('../../assets/icon/left-arrow.png')}
-                    style={styles.imgleftArrow}
-                />
-
-            </TouchableOpacity>
-
 
             <View style={styles.img}>
                 <Image
