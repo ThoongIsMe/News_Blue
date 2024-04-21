@@ -1,20 +1,11 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ScreemForgotPass from '../screems/ScreemsLogin/ScreemForgotPass';
-import ScreemLogin from '../screems/ScreemsLogin/ScreemLogin';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Color from '../constants/index';
+import { DrawerScreemRegister, DrawerNavigatorScreen, User } from '../screems/index';
 
 
-function DetailsScreen() {
-    return <ScreemForgotPass />;
-}
-
-function HomeScreen() {
-    return <ScreemLogin />;
-
-}
 
 
 const Tab = createBottomTabNavigator();
@@ -31,7 +22,7 @@ export default function App() {
             >
                 <Tab.Screen
                     name="Home"
-                    component={DetailsScreen}
+                    component={DrawerNavigatorScreen}
                     options={{
                         tabBarIcon: ({ size, color }) => (
                             <Icon name="home" size={size} color={color} />
@@ -42,7 +33,7 @@ export default function App() {
 
                 <Tab.Screen
                     name="Search"
-                    component={DetailsScreen}
+                    component={DrawerScreemRegister}
                     options={{
                         tabBarIcon: ({ size, color }) => (
                             <Icon name="search" size={size} color={color} />
@@ -53,7 +44,7 @@ export default function App() {
 
                 <Tab.Screen
                     name="Save"
-                    component={HomeScreen}
+                    component={DrawerScreemRegister}
                     options={{
                         tabBarIcon: ({ size, color }) => (
                             <Icon name="bookmark" size={size} color={color} />
@@ -64,7 +55,7 @@ export default function App() {
 
                 <Tab.Screen
                     name="User"
-                    component={HomeScreen}
+                    component={User}
                     options={{
                         tabBarIcon: ({ size, color }) => (
                             <Icon name="person" size={size} color={color} />
