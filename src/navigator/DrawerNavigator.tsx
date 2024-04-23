@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import 'react-native-gesture-handler';
-import { DetailsScreen, HomeScreen } from '../screems/index';
+import { HomeScreen, HomeNewss } from '../screems/index';
 import Color from "../constants/index";
 import CircularImageIcon from '../components/ImgAvt';
 
@@ -21,7 +21,7 @@ function DrawerNavigatorComponent() {
                 , // Pass the toggleHeader function
             }}
         >
-            <Drawer.Screen name="ScreemForgotPass" component={DetailsScreen} />
+            <Drawer.Screen name="Trang Chủ" component={HomeNewss} />
             <Drawer.Screen name="ScreemLogin" component={HomeScreen} />
         </Drawer.Navigator>
     );
