@@ -7,7 +7,7 @@ import ScreemRegister from '../screems/ScreemsLogin/ScreemRegister';
 import DrawerNavigatorComponent from '../navigator/DrawerNavigator.tsx';
 import UserScreen from './ScreemsUser/User.tsx';
 import AppNaivigator from '../navigator/AppNavigator.tsx'
-
+import HomeNews from './ScreemsUser/HomeNews.tsx';
 
 export function DetailsScreen() {
     return <ScreemForgotPass />;
@@ -32,5 +32,10 @@ export function User() {
 
 export function AppNaivigatorr() {
     return <AppNaivigator />;
+}
+
+
+export function HomeNewss() {
+    return <HomeNews />;
 }
 

@@ -3,7 +3,7 @@ import { View, Image, Text, StyleSheet, TouchableOpacity, Pressable } from 'reac
 import Color from '../constants/index';
 
 interface PrimaryCardProps {
-    children: React.ReactNode;
+    children: React.ReactNode; // Include children prop
     onPress: () => void;
     onClickTouchable: () => void;
     onClickTouchableDelete?: () => void;
