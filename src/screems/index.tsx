@@ -8,6 +8,8 @@ import DrawerNavigatorComponent from '../navigator/DrawerNavigator.tsx';
 import UserScreen from './ScreemsUser/User.tsx';
 import AppNaivigator from '../navigator/AppNavigator.tsx'
 import HomeNews from './ScreemsUser/HomeNews.tsx';
+import ReadNewss from './ScreemsUser/ReadNews.tsx';
+import StackAppNavigator from '../navigator/StackAppNavigator.tsx'
 
 export function DetailsScreen() {
     return <ScreemForgotPass />;
@@ -38,4 +40,16 @@ export function AppNaivigatorr() {
 export function HomeNewss() {
     return <HomeNews />;
 }
+
+export function ReadNews() {
+    return <ReadNewss />;
+}
+
+
+export function StackAppNavigatorr() {
+    return <StackAppNavigator />;
+}
+
+
+
 

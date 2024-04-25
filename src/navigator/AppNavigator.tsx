@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Color from '../constants/index';
-import { DrawerScreemRegister, DrawerNavigatorScreen, User } from '../screems/index';
+import { DrawerScreemRegister, User, StackAppNavigatorr } from '../screems/index';
+
 
 
 
@@ -11,6 +12,9 @@ import { DrawerScreemRegister, DrawerNavigatorScreen, User } from '../screems/in
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+    const TabBarIcon = ({ size, color }: any) => (
+        <Icon name="home" size={size} color={color} />
+    );
     return (
         <NavigationContainer>
             <Tab.Navigator
@@ -18,17 +22,26 @@ export default function App() {
                     headerShown: false,
                     tabBarActiveTintColor: Color.ui_black_10,
                     tabBarInactiveTintColor: Color.ui_grey_20,
+
                 }}
+
             >
                 <Tab.Screen
-                    name="Home"
-                    component={DrawerNavigatorScreen}
-                    options={{
-                        tabBarIcon: ({ size, color }) => (
-                            <Icon name="home" size={size} color={color} />
-                        )
+                    name="TrangChu"
+                    component={StackAppNavigatorr}
+                    options={({ route }) => {
+                        const focusedRouteName = getFocusedRouteNameFromRoute(route);
+                        if (focusedRouteName !== 'ReadNews') {
+                            return {
+                                tabBarStyle: { display: 'flex' },
+                                tabBarIcon: TabBarIcon, // Pass the Icon component as props
+                            };
+                        }
+                        return {
+                            tabBarStyle: { display: 'none' },
+                            tabBarIcon: TabBarIcon, // Pass the Icon component as props
+                        };
                     }}
-
                 />
 
                 <Tab.Screen
@@ -67,3 +80,6 @@ export default function App() {
         </NavigationContainer>
     );
 }
+
+
+
