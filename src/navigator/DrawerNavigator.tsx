@@ -24,6 +24,8 @@ function DrawerNavigatorComponent() {
             <Drawer.Screen name="Trang Chủ" component={HomeNewss} />
             <Drawer.Screen name="ScreemLogin" component={HomeScreen} />
         </Drawer.Navigator>
+
+
     );
 }
 

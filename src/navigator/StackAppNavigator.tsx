@@ -1,25 +1,24 @@
-2/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+// StackAppNavigator.tsx
 
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import 'react-native-gesture-handler';
-import { DrawerNavigatorScreen } from '../screems/index'
+import ReadNews from '../screems/ScreemsUser/ReadNews';
+import HomeNews from '../screems/ScreemsUser/HomeNews';
 
 const Stack = createStackNavigator();
 
-function StackAppNavigator() {
+const StackAppNavigator = () => {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Main" component={DrawerNavigatorScreen} options={{}} />
+            <Stack.Screen
+                name="Home"
+                component={HomeNews}
+                options={{ headerShown: false }} // Ẩn thanh điều hướng cho màn hình "Home"
+            />
+            <Stack.Screen name="ReadNews" component={ReadNews} />
             {/* Add other screens as needed */}
         </Stack.Navigator>
     );
 }
-
 
 export default StackAppNavigator;

@@ -4,6 +4,7 @@ import Color from '../../constants/index';
 import Container from '../../components/Container';
 import { getNewsFromApiAsync, getCategoriesFromApiAsync } from '../../helper/api';
 import CardNews from '../../components/CardNews';
+import FormatTimeAgo from '../../constants/time';
 
 interface Category {
     id: string;
@@ -23,10 +24,11 @@ interface Article {
     content: string;
 }
 
-function HomeNews(): React.JSX.Element {
-    const [pressedIndex, setPressedIndex] = useState<number | null>(0); // Default selected index is 0 (All)
+function HomeNews({ navigation }: any): React.JSX.Element {
+    const [pressedIndex, setPressedIndex] = useState<number>(0); // Default selected index is 0 (All)
     const [categories, setCategories] = useState<Category[]>([{ id: '0', name: 'All' }]); // Default category "All"
     const [articles, setArticles] = useState<Article[]>([]);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -46,7 +48,6 @@ function HomeNews(): React.JSX.Element {
         const fetchData = async () => {
             try {
                 const articlesData = await getNewsFromApiAsync();
-                console.log("Fetched articles:", articlesData);
                 setArticles(articlesData);
             } catch (error) {
                 console.error("Error fetching articles:", error);
@@ -56,7 +57,6 @@ function HomeNews(): React.JSX.Element {
         fetchData();
     }, []);
 
-    console.log("Articles state:", articles);
 
 
     const handlePress = (index: number) => {
@@ -67,21 +67,23 @@ function HomeNews(): React.JSX.Element {
     };
 
     ////////////////////////////////
+    // Wherever you're handling article press
+
     const handleArticlePress = (articleId: string) => {
-        // Xử lý khi một bài viết được nhấn
+
     };
 
-    // Hàm xử lý khi một action được thực hiện trên bài viết (ví dụ: bookmark, delete)
-
+    const handleArticleOnPress = (article: Article) => {
+        navigation.navigate("ReadNews", { article }); // Pass articleId as part of route params
+    };
 
     const renderArticle = ({ item }: { item: Article }) => {
-        console.log("Rendering article:", item);
         return (
             <CardNews
-                onPress={() => handleArticlePress(item.id)}
+                onPress={() => handleArticleOnPress(item)}
                 onClickTouchable={() => handleArticlePress(item.id)}
                 onClickTouchableDelete={() => handleArticlePress(item.id)}
-                time={item.publishedAt}
+                time={FormatTimeAgo(item.publishedAt)}
                 img={item.urlToImage}
                 user={1}
                 bool={false}
@@ -91,8 +93,9 @@ function HomeNews(): React.JSX.Element {
         );
     };
 
-    console.log("Articles state:", articles);
+    const filteredArticles = pressedIndex === 0 ? articles : articles.filter(article => article.id_category === categories[pressedIndex].id);
     return (
+
         <Container>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 {categories.map((category, index) => (
@@ -109,15 +112,11 @@ function HomeNews(): React.JSX.Element {
             </ScrollView>
 
             <FlatList
-                data={articles}
+                data={filteredArticles}
                 renderItem={renderArticle}
                 keyExtractor={item => item.id} // Assuming each article has a unique id
+                showsVerticalScrollIndicator={false}
             />
-
-
-
-
-
 
 
         </Container>
@@ -129,12 +128,14 @@ const styles = StyleSheet.create({
         width: 80,
         marginRight: 10,
         backgroundColor: Color.ui_white_10,
-        padding: 10,
+        paddingHorizontal: 10,
+        marginBottom: 10,
     },
     text: {
         color: Color.ui_black_10,
         fontWeight: 'bold',
         fontSize: 17,
+        textAlign: 'center',
     },
     textPressed: {
         color: Color.ui_blue_10,

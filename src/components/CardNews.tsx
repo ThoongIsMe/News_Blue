@@ -16,69 +16,74 @@ interface PrimaryCardProps {
 const CardNews: React.FC<PrimaryCardProps> = ({ children, onPress, onClickTouchable, time, img, user, onClickTouchableDelete }) => {
     var iconPath = '../assets/icon/';
     return (
-        <View style={styles.container}>
-            <Pressable style={styles.card} android_ripple={{ color: 'red' }} onPress={onPress} >
-                <View style={styles.cardContent}>
-                    <Text numberOfLines={3} style={styles.textContent} >
-                        {children}
-                    </Text>
-                    <View style={styles.cardFooter}>
-                        <Text style={styles.textTimestamp}>{time}</Text>
-                        {user === 1 && (
-                            <TouchableOpacity onPress={onClickTouchable}>
-                                <Image
-                                    source={require(iconPath + 'bookmark.png')}
-                                    style={styles.icon}
-                                />
-                            </TouchableOpacity>
-                        )}
-                        {user === 2 && (
-                            <TouchableOpacity onPress={onClickTouchable}>
-                                <Image
-                                    source={require(iconPath + 'bookmar.png')}
-                                    style={styles.icon}
-                                />
-                            </TouchableOpacity>
-                        )}
-                        {user === 3 && (
-                            <TouchableOpacity onPress={onClickTouchable}>
-                                <Image
-                                    source={require(iconPath + 'delete.png')}
-                                    style={styles.icon}
-                                />
-                            </TouchableOpacity>
-                        )}
-                        {user === 4 && (
-                            <>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <TouchableOpacity onPress={onClickTouchable}>
-                                        <Image
-                                            source={require(iconPath + 'wrench.png')}
-                                            style={styles.icon}
-                                        />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={onClickTouchableDelete}>
-                                        <Image
-                                            source={require(iconPath + 'delete.png')}
-                                            style={[styles.icon, { marginLeft: 20 }]}
-                                        />
-                                    </TouchableOpacity>
-                                </View>
-                            </>
-                        )}
+        <View style={styles.Aa}>
+            <View style={styles.container}>
+                <Pressable style={styles.card} android_ripple={{ color: 'red' }} onPress={onPress} >
+                    <View style={styles.cardContent}>
+                        <Text numberOfLines={3} style={styles.textContent} >
+                            {children}
+                        </Text>
+                        <View style={styles.cardFooter}>
+                            <Text style={styles.textTimestamp}>{time}</Text>
+                            {user === 1 && (
+                                <TouchableOpacity onPress={onClickTouchable}>
+                                    <Image
+                                        source={require(iconPath + 'bookmark.png')}
+                                        style={styles.icon}
+                                    />
+                                </TouchableOpacity>
+                            )}
+                            {user === 2 && (
+                                <TouchableOpacity onPress={onClickTouchable}>
+                                    <Image
+                                        source={require(iconPath + 'bookmar.png')}
+                                        style={styles.icon}
+                                    />
+                                </TouchableOpacity>
+                            )}
+                            {user === 3 && (
+                                <TouchableOpacity onPress={onClickTouchable}>
+                                    <Image
+                                        source={require(iconPath + 'delete.png')}
+                                        style={styles.icon}
+                                    />
+                                </TouchableOpacity>
+                            )}
+                            {user === 4 && (
+                                <>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <TouchableOpacity onPress={onClickTouchable}>
+                                            <Image
+                                                source={require(iconPath + 'wrench.png')}
+                                                style={styles.icon}
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={onClickTouchableDelete}>
+                                            <Image
+                                                source={require(iconPath + 'delete.png')}
+                                                style={[styles.icon, { marginLeft: 20 }]}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                </>
+                            )}
+                        </View>
                     </View>
-                </View>
-                <Image
-                    source={{ uri: img }}
-                    style={styles.image}
-                />
-            </Pressable>
+                    <Image
+                        source={{ uri: img }}
+                        style={styles.image}
+                    />
+                </Pressable>
+            </View>
         </View>
     );
 };
 const styles = StyleSheet.create({
+    Aa: {
+        marginVertical: 15,
+    },
     container: {
-        marginTop: 35,
+        marginTop: 30,
     },
     card: {
         flexDirection: 'row-reverse',
@@ -110,7 +115,7 @@ const styles = StyleSheet.create({
         width: 150,
         height: 100,
         borderRadius: 10,
-        marginTop: -35,
+        marginTop: -30,
     },
     icon: {
         width: 20,
