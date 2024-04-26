@@ -20,7 +20,7 @@ const CircularImageIcon: React.FC<CircularImageIconProps> = ({ imageSource, navi
         <TouchableOpacity onPress={handlePress}>
             <Image
                 source={imageSource}
-                style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
+                style={{ width: 34, height: 34, borderRadius: 17, marginRight: 10 }}
             />
         </TouchableOpacity>
     );

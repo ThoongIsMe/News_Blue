@@ -1,14 +1,7 @@
 import { Dimensions, StatusBar } from "react-native";
 
 
-//vd mẫu
 
-const bottombarHeight =
-    Dimensions.get("screen").height == Dimensions.get("window").height ?
-    Dimensions.get("screen").height -
-    Dimensions.get("window").height +
-    StatusBar.currentHeight :
-    StatusBar.currentHeight;
 
 const Colors = {
     //UI 
@@ -35,6 +28,7 @@ const Fonts = {
 
 
 export default Colors;
+
 
 ///https://github.com/Rushit013/RNProjectStructure/blob/main/src/utils/index.js
 ///https://dev.to/rushitjivani/ultimate-folder-structure-for-your-react-native-project-1k27

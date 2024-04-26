@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
-import Color from '../constants/index';
+import Color from '../constants/Colors';
 
 interface PrimaryCardProps {
     children: React.ReactNode; // Include children prop

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import 'react-native-gesture-handler';
 import { HomeScreen, HomeNewss } from '../screems/index';
-import Color from "../constants/index";
+import Color from "../constants/Colors";
 import CircularImageIcon from '../components/ImgAvt';
 
 const Drawer = createDrawerNavigator();

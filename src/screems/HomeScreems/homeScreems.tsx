@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import Color from '../../constants/index'
+import Color from '../../constants/Colors'
 
 
 function homeScreems(): React.ReactElement {
