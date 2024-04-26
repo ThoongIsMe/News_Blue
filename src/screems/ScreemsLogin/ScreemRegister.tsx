@@ -3,13 +3,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import { Button, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Color from '../../constants/index'
+import Color from '../../constants/Colors'
 import InputText from '../../components/InputText';
 import PrimaryButton from '../../components/PrimaryButton';
 import Container from '../../components/Container';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 
-function ScreemRegister(): React.ReactElement {
+function ScreemRegister({ navigation }: any): React.ReactElement {
     const [valueFirstName, setTextFirstName] = useState('');
     const handleInputFirstNameChange = (name: string) => {
         setTextFirstName(name);
@@ -43,6 +44,11 @@ function ScreemRegister(): React.ReactElement {
             keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}>
             <ScrollView>
                 <Container>
+                    <View style={{ marginLeft: -10 }}>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <Icon name="chevron-back" color={Color.ui_black_10} size={30} />
+                        </TouchableOpacity>
+                    </View>
                     <View style={styles.img}>
                         <Image
                             source={require('../../assets/images/logoNews.jpg')}

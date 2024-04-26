@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-no-undef */
 import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import Color from '../constants/index'
+import Color from '../constants/Colors'
 import Container from './Container';
 
 interface InputTextProps {

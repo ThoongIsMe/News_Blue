@@ -1,23 +1,34 @@
-export const getNewsFromApiAsync = async(code) => {
+import axios from 'axios';
+import Url from '../constants/Url';
+
+export const getNewsFromApiAsync = async() => {
     try {
-        const response = await fetch('http://192.168.4.102:3030/articles');
-        const json = await response.json();
-        return json; // Trả về toàn bộ đối tượng JSON từ API
+        const response = await axios.get(`http://${Url.IP_WF}:${Url.PORT}/articles`);
+        return response.data;
     } catch (error) {
         console.error(error);
         return [];
     }
 };
 
-export const getCategoriesFromApiAsync = async(code) => {
+export const getCategoriesFromApiAsync = async() => {
     try {
-        const response = await fetch('http://192.168.4.102:3030/categories');
-        const json = await response.json();
-        return json;
+        const response = await axios.get(`http://${Url.IP_WF}:${Url.PORT}/categories`);
+        return response.data;
     } catch (error) {
         console.error(error);
         return [];
     }
 };
 
-export default { getNewsFromApiAsync, getCategoriesFromApiAsync };
+export const getUserFromApiAsync = async() => {
+    try {
+        const response = await axios.get(`http://${Url.IP_WF}:${Url.PORT}/users`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+};
+
+export default { getNewsFromApiAsync, getCategoriesFromApiAsync, getUserFromApiAsync };

@@ -3,13 +3,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Color from '../../constants/index';
+import Color from '../../constants/Colors';
 import InputText from '../../components/InputText';
 import PrimaryButton from '../../components/PrimaryButton';
 import Container from '../../components/Container';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-
-function ScreemForgotPass(): React.ReactElement {
+function ScreemForgotPass({ navigation }: any): React.ReactElement {
     const [valueEmail, setTextEmail] = useState('');
     const handleInputEmailChange = (email: string) => {
         setTextEmail(email);
@@ -18,7 +18,11 @@ function ScreemForgotPass(): React.ReactElement {
     return (
 
         <Container>
-
+            <View style={{ marginLeft: -10 }}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Icon name="chevron-back" color={Color.ui_black_10} size={30} />
+                </TouchableOpacity>
+            </View>
             <View style={styles.img}>
                 <Image
                     source={require('../../assets/images/logoNews.jpg')}

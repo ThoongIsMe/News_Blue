@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Color from '../../constants/index';
+import Color from '../../constants/Colors';
 import Container from '../../components/Container';
 import { getNewsFromApiAsync, getCategoriesFromApiAsync } from '../../helper/api';
 import CardNews from '../../components/CardNews';
 import FormatTimeAgo from '../../constants/time';
+import Header from '../../components/Header';
+
+import { useDispatch, useSelector } from 'react-redux';
 
 interface Category {
     id: string;
@@ -29,6 +32,7 @@ function HomeNews({ navigation }: any): React.JSX.Element {
     const [categories, setCategories] = useState<Category[]>([{ id: '0', name: 'All' }]); // Default category "All"
     const [articles, setArticles] = useState<Article[]>([]);
 
+    const info = useSelector((state: any) => state.personalInfo);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,10 +42,12 @@ function HomeNews({ navigation }: any): React.JSX.Element {
             } catch (error) {
                 console.error(error);
             }
+
         };
 
+        console.log("Info", info);
         fetchData();
-    }, []);
+    }, [info]);
 
 
     useEffect(() => {
@@ -70,7 +76,7 @@ function HomeNews({ navigation }: any): React.JSX.Element {
     // Wherever you're handling article press
 
     const handleArticlePress = (articleId: string) => {
-
+        console.log(articleId);
     };
 
     const handleArticleOnPress = (article: Article) => {
@@ -97,7 +103,9 @@ function HomeNews({ navigation }: any): React.JSX.Element {
     return (
 
         <Container>
+            <Header />
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+
                 {categories.map((category, index) => (
                     <TouchableOpacity key={index} onPress={() => handlePress(index)}>
                         <View style={[styles.item, pressedIndex === index ? styles.itemPressed : null]}>
@@ -130,6 +138,7 @@ const styles = StyleSheet.create({
         backgroundColor: Color.ui_white_10,
         paddingHorizontal: 10,
         marginBottom: 10,
+        paddingTop: 10
     },
     text: {
         color: Color.ui_black_10,
