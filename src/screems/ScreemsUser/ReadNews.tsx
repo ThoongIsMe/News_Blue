@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView, Linking } 
 import Icon from 'react-native-vector-icons/Ionicons';
 import Color from '../../constants/Colors';
 import FormatTimeAgo from '../../constants/time';
+import getAudio from '../../helper/getAudio';
+
 
 const ReadNews = ({ navigation, route }: any) => {
     const { article } = route.params;
@@ -10,6 +12,12 @@ const ReadNews = ({ navigation, route }: any) => {
     if (!article) {
         return <Text>Loading...</Text>;
     }
+
+    var data = article.title + article.description + article.content + article.author;
+
+
+    getAudio(data);
+
 
     const handleUrlPress = () => {
         if (article.url) {
@@ -47,6 +55,9 @@ const ReadNews = ({ navigation, route }: any) => {
             </View>
 
             <ScrollView >
+                <TouchableOpacity style={styles.bookmarkIcon}>
+                    <Icon name="ear-outline" color={Color.ui_blue_10} size={30} />
+                </TouchableOpacity>
                 <Text style={[styles.title, styles.textSpacing, styles.centerText]}>{article.title}</Text>
                 <Text style={[styles.description, styles.textSpacing, styles.centerText]}>{article.description}</Text>
                 <Text style={[styles.content, styles.textSpacing, styles.centerText]}>{article.content}</Text>

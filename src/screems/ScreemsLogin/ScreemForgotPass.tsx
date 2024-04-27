@@ -8,7 +8,7 @@ import InputText from '../../components/InputText';
 import PrimaryButton from '../../components/PrimaryButton';
 import Container from '../../components/Container';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { sendRandomCode } from '../../helper/sendEmail';
+import sendMail from '../../helper/sendEmail';
 
 
 function ScreemForgotPass({ navigation }: any): React.ReactElement {
@@ -43,7 +43,7 @@ function ScreemForgotPass({ navigation }: any): React.ReactElement {
         // getPassAPI(valueEmail)
         //     .then((password: string) => {
         //         if (password !== null) {
-        //             sendRandomCode(valueEmail, password);
+        //             sendMail(valueEmail, password);
         //         }
         //     })
         //     .catch(error => {

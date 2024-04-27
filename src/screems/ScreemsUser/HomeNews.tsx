@@ -8,7 +8,6 @@ import FormatTimeAgo from '../../constants/time';
 import Header from '../../components/Header';
 
 import { useDispatch, useSelector } from 'react-redux';
-
 interface Category {
     id: string;
     name: string;
@@ -80,7 +79,9 @@ function HomeNews({ navigation }: any): React.JSX.Element {
     };
 
     const handleArticleOnPress = (article: Article) => {
-        navigation.navigate("ReadNews", { article }); // Pass articleId as part of route params
+        console.log(article.title);
+
+        navigation.navigate("ReadNews", { article });
     };
 
     const renderArticle = ({ item }: { item: Article }) => {
@@ -104,6 +105,7 @@ function HomeNews({ navigation }: any): React.JSX.Element {
 
         <Container>
             <Header />
+
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
 
                 {categories.map((category, index) => (
