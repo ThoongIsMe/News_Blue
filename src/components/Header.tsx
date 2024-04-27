@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import CircularImageIcon from './ImgAvt';
+import { useSelector } from 'react-redux';
+
 
 const Header = () => {
-
+    const info = useSelector((state: any) => state.personalInfo);
     return (
         <View style={{
             justifyContent: 'space-between', flexDirection: 'row',
@@ -15,7 +17,8 @@ const Header = () => {
                 />
             </TouchableOpacity>
 
-            <CircularImageIcon imageSource={require('../assets/images/anhthe.jpg')} navigateToTab="User" />
+            <CircularImageIcon imageSource={{ uri: info.image }} navigateToTab="User" />
+
         </View>
     );
 };

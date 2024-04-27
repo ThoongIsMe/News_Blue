@@ -2,19 +2,56 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Color from '../../constants/Colors';
 import InputText from '../../components/InputText';
 import PrimaryButton from '../../components/PrimaryButton';
 import Container from '../../components/Container';
 import Icon from 'react-native-vector-icons/Ionicons';
+import sendMail from '../../helper/sendEmail';
+
 
 function ScreemForgotPass({ navigation }: any): React.ReactElement {
     const [valueEmail, setTextEmail] = useState('');
     const handleInputEmailChange = (email: string) => {
         setTextEmail(email);
     };
-    const handlePress = () => { }
+
+    async function getPassAPI(email: string) {
+        const apiUrl = `http://192.168.4.102:3030/users?email=${email}`;
+
+        try {
+            const response = await fetch(apiUrl);
+            const userData = await response.json();
+            const password = userData[0]?.password;
+            console.log(password);
+
+            if (!password) {
+                Alert.alert('Thất bại, vui lòng kiếm tra thông tin vừa nhập');
+                return null;
+            } else {
+                Alert.alert('Thành công, vui lòng kiểm tra email của bạn');
+            }
+            return password;
+        } catch (error) {
+            Alert.alert('Thất bại, vui lòng kiếm tra thông tin vừa nhập');
+        }
+    }
+
+
+    const handlePress = () => {
+        // getPassAPI(valueEmail)
+        //     .then((password: string) => {
+        //         if (password !== null) {
+        //             sendMail(valueEmail, password);
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error('Error handling press:', error);
+        //         // Xử lý lỗi khi không thể lấy mật khẩu từ API
+        //     });
+    }
+
     return (
 
         <Container>
