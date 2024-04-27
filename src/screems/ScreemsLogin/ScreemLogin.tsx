@@ -13,17 +13,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateTTUser } from '../../redux/actions/updateAction';
 import { store } from '../../redux/store';
 
+// chuyển useDispatch -> useAppDispatch type store
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
+
+
 
 function ScreemLogin({ navigation }: any): React.ReactElement {
     const [getPassVisible, setPassVisible] = useState(false);
     const [valueEmail, setTextEmail] = useState('');
     const [valuePass, setTextPass] = useState('');
     const [user, setUser] = useState<Users[]>([]);
+
     const info = useSelector((state: any) => state.personalInfo);
     const dispatch = useAppDispatch();
-
     interface Users {
         id: string;
         lastName: string;
@@ -45,7 +48,9 @@ function ScreemLogin({ navigation }: any): React.ReactElement {
         };
         console.log("Info", info);
         fetchData();
+
     }, [info]);
+
 
 
     const handleInputEmailChange = (email: string) => {

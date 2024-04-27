@@ -2,15 +2,17 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
-import { Button, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Color from '../../constants/Colors'
 import InputText from '../../components/InputText';
 import PrimaryButton from '../../components/PrimaryButton';
 import Container from '../../components/Container';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-
+import Url from '../../constants/Url';
+import uuid from 'react-native-uuid';
 function ScreemRegister({ navigation }: any): React.ReactElement {
+    const [getPassVisible, setPassVisible] = useState(false);
+    const [getPassVisible1, setPassVisible1] = useState(false);
     const [valueFirstName, setTextFirstName] = useState('');
     const handleInputFirstNameChange = (name: string) => {
         setTextFirstName(name);
@@ -37,7 +39,34 @@ function ScreemRegister({ navigation }: any): React.ReactElement {
         setTextComfirmPass(pass);
     };
 
-    const handlePress = () => { }
+
+    const handlePress = () => {
+        let id = uuid.v4();
+        let imageUrl = 'https://source.unsplash.com/random';
+        let objUser = {
+            id: id,
+            firstName: valueFirstName,
+            lastName: valueLastName,
+            image: imageUrl,
+            email: valueEmail,
+            password: valueComfirmPass,
+        };
+        console.log(objUser);
+        let url_api = `http://${Url.IP_WF}:${Url.PORT}/users`;
+        fetch(url_api, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(objUser),
+        })
+            .then((response) => {
+                if (response.status == 201)
+                    Alert.alert("Thêm thành công");
+            })
+            .catch((error) => { console.log(error); })
+    };
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -78,17 +107,41 @@ function ScreemRegister({ navigation }: any): React.ReactElement {
                     <InputText
                         handleInputChange={handleInputPassChange}
                         value={valuePass}
-                        secureTextEntry={true}>
+                        secureTextEntry={getPassVisible ? false : true}>
                         Password
                     </InputText>
+                    <View style={{ alignItems: 'flex-end', marginTop: -40 }}>
+                        {getPassVisible ?
+                            <TouchableOpacity onPress={() => { setPassVisible(!getPassVisible) }}>
+                                <Icon name="eye-off-outline" color={Color.ui_black_10} size={30} />
+                            </TouchableOpacity>
+                            :
+                            <TouchableOpacity onPress={() => { setPassVisible(!getPassVisible) }}>
+                                <Icon name="eye-outline" color={Color.ui_black_10} size={30} />
+                            </TouchableOpacity>
+                        }
+                    </View>
+
+
+
 
                     <InputText
                         handleInputChange={handleInputComfirmPassChange}
                         value={valueComfirmPass}
-                        secureTextEntry={true}>
+                        secureTextEntry={getPassVisible1 ? false : true}>
                         Comfirm Password
                     </InputText>
-
+                    <View style={{ alignItems: 'flex-end', marginTop: -40 }}>
+                        {getPassVisible1 ?
+                            <TouchableOpacity onPress={() => { setPassVisible1(!getPassVisible1) }}>
+                                <Icon name="eye-off-outline" color={Color.ui_black_10} size={30} />
+                            </TouchableOpacity>
+                            :
+                            <TouchableOpacity onPress={() => { setPassVisible1(!getPassVisible1) }}>
+                                <Icon name="eye-outline" color={Color.ui_black_10} size={30} />
+                            </TouchableOpacity>
+                        }
+                    </View>
 
                     <View style={styles.btnSubmit}>
                         <PrimaryButton onPress={handlePress} color={Color.ui_blue_10} height={50} width={200} borderRadius={20}>
