@@ -1,22 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Color from '../../constants/Colors';
 import FormatTimeAgo from '../../constants/time';
 import getAudio from '../../helper/getAudio';
+//audio
+import Sound from 'react-native-sound';
 
+
+Sound.setCategory('Playback');
 
 const ReadNews = ({ navigation, route }: any) => {
     const { article } = route.params;
+    //audio
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [audio, setAudio] = useState<Sound | null>(null);
+    const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
+
+    useEffect(() => {
+        var data = article.title + article.description + article.content + article.author;
+        getAudio(data).then((url: any) => {
+            setAudioUrl(url);
+        });
+    }, [article.author, article.content, article.description, article.title]);
+
+    useEffect(() => {
+        if (audioUrl) {
+            const audioFile = new Sound(audioUrl);
+            setAudio(audioFile);
+
+            return () => {
+                audioFile.release();
+            };
+        }
+    }, [audioUrl]);
+
+    const playPause = () => {
+        if (!audio) return;
+        if (isPlaying) {
+            audio.pause();
+        } else {
+            audio.play((success: boolean) => {
+                if (success) {
+                    console.log('successfully finished playing');
+                } else {
+                    console.log('playback failed due to audio decoding errors');
+                }
+            });
+        }
+        setIsPlaying(!isPlaying);
+    };
+    ///
     if (!article) {
         return <Text>Loading...</Text>;
     }
-
-    var data = article.title + article.description + article.content + article.author;
-
-
-    getAudio(data);
 
 
     const handleUrlPress = () => {
@@ -55,8 +93,18 @@ const ReadNews = ({ navigation, route }: any) => {
             </View>
 
             <ScrollView >
-                <TouchableOpacity style={styles.bookmarkIcon}>
-                    <Icon name="ear-outline" color={Color.ui_blue_10} size={30} />
+                <TouchableOpacity style={[styles.bookmarkIcon, { flexDirection: 'row' }]} onPress={playPause}>
+                    <View style={{
+                        padding: 5,
+                    }}>
+                        <Text style={{
+                            color: Color.ui_blue_10, fontSize: 23,
+                            fontWeight: 'bold',
+                        }}>Đọc</Text>
+                    </View>
+                    {isPlaying ? <Icon name="pause-circle-outline" color={Color.ui_black_10} size={40} />
+                        : <Icon name="play-circle-outline" color={Color.ui_black_10} size={40} />}
+
                 </TouchableOpacity>
                 <Text style={[styles.title, styles.textSpacing, styles.centerText]}>{article.title}</Text>
                 <Text style={[styles.description, styles.textSpacing, styles.centerText]}>{article.description}</Text>
@@ -98,6 +146,7 @@ const styles = StyleSheet.create({
     },
     bookmarkIcon: {
         marginLeft: 'auto',
+        paddingRight: 10,
     },
     bottomContainer: {
         position: 'absolute',
