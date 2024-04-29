@@ -79,7 +79,7 @@ function HomeNews({ navigation }: any): React.JSX.Element {
     };
 
     const handleArticleOnPress = (article: Article) => {
-        console.log(article.title);
+        console.log(article.urlToImage);
 
         navigation.navigate("ReadNews", { article });
     };
