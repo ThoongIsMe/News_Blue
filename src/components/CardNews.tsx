@@ -5,7 +5,7 @@ import Color from '../constants/Colors';
 interface PrimaryCardProps {
     children: React.ReactNode; // Include children prop
     onPress: () => void;
-    onClickTouchable: () => void;
+    onClickTouchable?: () => void;
     onClickTouchableDelete?: () => void;
     time: string;
     bool: boolean;

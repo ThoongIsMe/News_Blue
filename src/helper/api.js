@@ -31,4 +31,18 @@ export const getUserFromApiAsync = async() => {
     }
 };
 
-export default { getNewsFromApiAsync, getCategoriesFromApiAsync, getUserFromApiAsync };
+
+export const getFavoritesFromApiAsync = async() => {
+    try {
+        const response = await axios.get(`http://${Url.IP_WF}:${Url.PORT}/favorites`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+};
+
+
+
+
+export default { getNewsFromApiAsync, getCategoriesFromApiAsync, getUserFromApiAsync, getFavoritesFromApiAsync };
