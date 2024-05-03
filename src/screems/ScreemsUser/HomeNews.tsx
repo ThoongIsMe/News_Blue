@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Color from '../../constants/Colors';
 import Container from '../../components/Container';
-import { getNewsFromApiAsync, getCategoriesFromApiAsync } from '../../helper/api';
+import { getNewsFromApiAsync, getCategoriesFromApiAsync, getFavoritesFromApiAsync } from '../../helper/api';
 import CardNews from '../../components/CardNews';
 import FormatTimeAgo from '../../constants/time';
 import Header from '../../components/Header';
+import uuid from 'react-native-uuid';
+import Url from '../../constants/Url';
 
 import { useDispatch, useSelector } from 'react-redux';
 interface Category {
@@ -26,13 +29,23 @@ interface Article {
     content: string;
 }
 
+
+interface Favorites {
+    id: string;
+    publishedAt: string;
+    id_favorite: string;
+    id_user: string;
+}
+
 function HomeNews({ navigation }: any): React.JSX.Element {
     const [pressedIndex, setPressedIndex] = useState<number>(0); // Default selected index is 0 (All)
     const [categories, setCategories] = useState<Category[]>([{ id: '0', name: 'All' }]); // Default category "All"
     const [articles, setArticles] = useState<Article[]>([]);
+    const [favorite, setFavorites] = useState<Favorites[]>([]);
+
+
 
     const info = useSelector((state: any) => state.personalInfo);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -43,8 +56,6 @@ function HomeNews({ navigation }: any): React.JSX.Element {
             }
 
         };
-
-        console.log("Info", info);
         fetchData();
     }, [info]);
 
@@ -63,6 +74,25 @@ function HomeNews({ navigation }: any): React.JSX.Element {
     }, []);
 
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const favoritesData = await getFavoritesFromApiAsync();
+                setFavorites(favoritesData);
+            } catch (error) {
+                console.error("Error fetching articles:", error);
+            }
+
+        };
+
+        // if (favoritesChanged) {
+        //     fetchData();
+        //     setFavoritesChanged(false); // Đặt lại trạng thái favoritesChanged
+        // }
+        fetchData();
+    }, [favorite]);
+
+
 
     const handlePress = (index: number) => {
         setPressedIndex(index);
@@ -76,12 +106,94 @@ function HomeNews({ navigation }: any): React.JSX.Element {
 
     const handleArticlePress = (articleId: string) => {
         console.log(articleId);
+        let id = uuid.v4();
+        let favoriteData = {
+            id: id,
+            userID: info.id,
+            articleID: articleId,
+        };
+        let url_api = `http://${Url.IP_WF}:${Url.PORT}/favorites`;
+
+        // Check if the favorite entry already exists
+        fetch(url_api)
+            .then((response) => response.json())
+            .then((favorites) => {
+                const existingFavorite = favorites.find(
+                    (favorite: any) => favorite.userID === info.id && favorite.articleID === articleId
+                );
+
+                if (existingFavorite) {
+                    // If the favorite already exists, delete it
+                    let deleteUrl = `${url_api}/${existingFavorite.id}`;
+
+                    fetch(deleteUrl, {
+                        method: 'DELETE',
+                    })
+                        .then(() => {
+
+                            console.log("Favorite deleted successfully");
+                        })
+                        .catch((error) => {
+                            console.error("Error deleting favorite:", error);
+                        });
+                } else {
+                    // If the favorite does not exist, add it
+                    fetch(url_api, {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(favoriteData),
+                    })
+                        .then((response) => {
+                            if (response.status === 201) {
+                                console.log("Favorite added successfully");
+                            } else {
+                                console.log("Failed to add favorite");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error adding favorite:", error);
+                        });
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching favorites:", error);
+            });
+
     };
 
-    const handleArticleOnPress = (article: Article) => {
+
+
+    const handleArticleOnPress = async (article: Article) => {
         console.log(article.title);
 
-        navigation.navigate("ReadNews", { article });
+        try {
+            const updatedArticle = {
+                ...article,
+                viewCount: article.viewCount + 1
+            };
+
+            const response = await fetch(`http://${Url.IP_WF}:${Url.PORT}/articles/${article.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedArticle)
+            });
+
+            if (response.ok) {
+                const updatedArticles = articles.map(a => a.id === article.id ? updatedArticle : a);
+                setArticles(updatedArticles);
+
+                navigation.navigate("ReadNews", { article: updatedArticle });
+            } else {
+                console.error('Failed to update article viewCount');
+            }
+        } catch (error) {
+            console.error('Error updating article viewCount:', error);
+        }
     };
 
     const renderArticle = ({ item }: { item: Article }) => {
@@ -89,15 +201,16 @@ function HomeNews({ navigation }: any): React.JSX.Element {
             <CardNews
                 onPress={() => handleArticleOnPress(item)}
                 onClickTouchable={() => handleArticlePress(item.id)}
-                onClickTouchableDelete={() => handleArticlePress(item.id)}
+                onClickTouchableDelete={() => handleArticlePress(item.id)} // You might want to remove quotes around item.id
                 time={FormatTimeAgo(item.publishedAt)}
                 img={item.urlToImage}
-                user={1}
+                user={favorite.find((fav: any) => fav.articleID === item.id && fav.userID === info.id) ? 2 : 1}
                 bool={false}
             >
                 {item.title}
             </CardNews>
         );
+
     };
 
     const filteredArticles = pressedIndex === 0 ? articles : articles.filter(article => article.id_category === categories[pressedIndex].id);

@@ -10,7 +10,7 @@ import AppNaivigator from '../navigator/AppNavigator.tsx'
 import HomeNews from './ScreemsUser/HomeNews.tsx';
 import ReadNewss from './ScreemsUser/ReadNews.tsx';
 import StackAppNavigator from '../navigator/StackAppNavigator.tsx'
-
+import SaveNews from './ScreemsUser/SaveNews.tsx';
 export function DetailsScreen() {
     return <ScreemForgotPass />;
 }
@@ -48,6 +48,10 @@ export function ReadNews() {
 
 export function StackAppNavigatorr() {
     return <StackAppNavigator />;
+}
+
+export function SaveNewss() {
+    return <SaveNews />;
 }
 
 
