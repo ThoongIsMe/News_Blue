@@ -10,13 +10,17 @@ import ScreemRegister from '../screems/ScreemsLogin/ScreemRegister';
 import ScreemForgotPass from '../screems/ScreemsLogin/ScreemForgotPass';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
-
+import StackAppSave from './StackAppSave';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 function App() {
     const TabBarIcon = ({ size, color }: any) => (
         <Icon name="home" size={size} color={color} />
+    );
+
+    const TabBarIconSave = ({ size, color }: any) => (
+        <Icon name="bookmark" size={size} color={color} />
     );
     return (
         <Tab.Navigator
@@ -59,11 +63,19 @@ function App() {
 
             <Tab.Screen
                 name="Save"
-                component={DrawerScreemRegister}
-                options={{
-                    tabBarIcon: ({ size, color }) => (
-                        <Icon name="bookmark" size={size} color={color} />
-                    ),
+                component={StackAppSave}
+                options={({ route }) => {
+                    const focusedRouteName = getFocusedRouteNameFromRoute(route);
+                    if (focusedRouteName !== 'ReadNews') {
+                        return {
+                            tabBarStyle: { display: 'flex' },
+                            tabBarIcon: TabBarIconSave, // Pass the Icon component as props
+                        };
+                    }
+                    return {
+                        tabBarStyle: { display: 'none' },
+                        tabBarIcon: TabBarIconSave, // Pass the Icon component as props
+                    };
                 }}
             />
 
