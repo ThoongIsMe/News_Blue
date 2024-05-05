@@ -11,6 +11,20 @@ import HomeNews from './ScreemsUser/HomeNews.tsx';
 import ReadNewss from './ScreemsUser/ReadNews.tsx';
 import StackAppNavigator from '../navigator/StackAppNavigator.tsx'
 import SaveNews from './ScreemsUser/SaveNews.tsx';
+import SearchNews from './ScreemsUser/SearchNews.tsx';
+import StackAppUser from '../navigator/StackAppUser.tsx';
+
+import Contact from './ScreemsUser/Contact.tsx';
+
+export function Contacts() {
+    return <Contact />;
+}
+
+export function StackAppUserr() {
+    return <StackAppUser />;
+}
+
+
 export function DetailsScreen() {
     return <ScreemForgotPass />;
 }
@@ -52,6 +66,10 @@ export function StackAppNavigatorr() {
 
 export function SaveNewss() {
     return <SaveNews />;
+}
+
+export function SearchNewss() {
+    return <SearchNews />;
 }
 
 

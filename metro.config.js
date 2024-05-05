@@ -12,6 +12,7 @@ const config = {
         assetExts: ['bin', 'txt', 'jpg', 'png', 'ttf'],
         sourceExts: ['js', 'json', 'ts', 'tsx', 'jsx'],
         blacklistRE: blacklist([/platform_node/]),
+
     },
 };
 

@@ -3,7 +3,7 @@ import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-naviga
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Color from '../constants/Colors';
-import { DrawerScreemRegister, User, StackAppNavigatorr } from '../screems/index';
+import { StackAppUserr, StackAppNavigatorr } from '../screems/index';
 import { createStackNavigator } from '@react-navigation/stack';
 import ScreemLogin from '../screems/ScreemsLogin/ScreemLogin';
 import ScreemRegister from '../screems/ScreemsLogin/ScreemRegister';
@@ -11,6 +11,9 @@ import ScreemForgotPass from '../screems/ScreemsLogin/ScreemForgotPass';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
 import StackAppSave from './StackAppSave';
+import StackAppSearch from './StackAppSearch';
+// import StackAppUser from './StackAppUser';
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -21,6 +24,10 @@ function App() {
 
     const TabBarIconSave = ({ size, color }: any) => (
         <Icon name="bookmark" size={size} color={color} />
+    );
+
+    const TabBarIconSearch = ({ size, color }: any) => (
+        <Icon name="search" size={size} color={color} />
     );
     return (
         <Tab.Navigator
@@ -52,11 +59,19 @@ function App() {
 
             <Tab.Screen
                 name="Search"
-                component={DrawerScreemRegister}
-                options={{
-                    tabBarIcon: ({ size, color }) => (
-                        <Icon name="search" size={size} color={color} />
-                    )
+                component={StackAppSearch}
+                options={({ route }) => {
+                    const focusedRouteName = getFocusedRouteNameFromRoute(route);
+                    if (focusedRouteName !== 'ReadNews') {
+                        return {
+                            tabBarStyle: { display: 'flex' },
+                            tabBarIcon: TabBarIconSearch, // Pass the Icon component as props
+                        };
+                    }
+                    return {
+                        tabBarStyle: { display: 'none' },
+                        tabBarIcon: TabBarIconSearch, // Pass the Icon component as props
+                    };
                 }}
 
             />
@@ -81,8 +96,8 @@ function App() {
 
 
             <Tab.Screen
-                name="User"
-                component={User}
+                name="Users"
+                component={StackAppUserr}
                 options={{
                     tabBarIcon: ({ size, color }) => (
                         <Icon name="person" size={size} color={color} />
