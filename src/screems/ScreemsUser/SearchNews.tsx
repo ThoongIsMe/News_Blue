@@ -1,20 +1,24 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Color from '../../constants/Colors';
+import * as React from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import SearchText from '../../components/SearchText';
+import { useEffect, useState } from 'react';
 import Container from '../../components/Container';
-import { getNewsFromApiAsync, getCategoriesFromApiAsync, getFavoritesFromApiAsync } from '../../helper/api';
-import CardNews from '../../components/CardNews';
-import FormatTimeAgo from '../../constants/time';
-import Header from '../../components/Header';
+import Color from '../../constants/Colors';
+import { getFavoritesFromApiAsync, getNewsFromApiAsync } from '../../helper/api';
+import { useSelector } from 'react-redux';
 import uuid from 'react-native-uuid';
 import Url from '../../constants/Url';
-
-import { useDispatch, useSelector } from 'react-redux';
+import CardNews from '../../components/CardNews';
+import FormatTimeAgo from '../../constants/time';
 import { useFocusEffect } from '@react-navigation/native';
-interface Category {
+
+
+interface Favorites {
     id: string;
-    name: string;
+    userID: string;
+    articleID: string;
+    dateAdded: string;
+
 }
 
 interface Article {
@@ -31,50 +35,16 @@ interface Article {
 }
 
 
-interface Favorites {
-    id: string;
-    publishedAt: string;
-    id_favorite: string;
-    id_user: string;
-}
-
-function HomeNews({ navigation }: any): React.JSX.Element {
-    const [pressedIndex, setPressedIndex] = useState<number>(0); // Default selected index is 0 (All)
-    const [categories, setCategories] = useState<Category[]>([{ id: '0', name: 'All' }]); // Default category "All"
-    const [articles, setArticles] = useState<Article[]>([]);
-    const [favorite, setFavorites] = useState<Favorites[]>([]);
-
-    const [refetchFavorites, setRefetchFavorites] = useState(false);
-
-
+// Trong ScreemsUser/User.tsx
+function SearchNews({ navigation }: any) {
     const info = useSelector((state: any) => state.personalInfo);
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const categoriesData = await getCategoriesFromApiAsync();
-                setCategories([{ id: '0', name: 'All' }, ...categoriesData]); // Prepend "All" category to fetched categories
-            } catch (error) {
-                console.error(error);
-            }
-
-        };
-        fetchData();
-    }, [info]);
 
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const articlesData = await getNewsFromApiAsync();
-                setArticles(articlesData);
-            } catch (error) {
-                console.error("Error fetching articles:", error);
-            }
-        };
-
-        fetchData();
-    }, []);
-
+    const [favorite, setFavorites] = useState<Favorites[]>([]);
+    const [articles, setArticles] = useState<Article[]>([]);
+    const [refetchFavorites, setRefetchFavorites] = useState(false);
+    const [valueSearch, setValueSearch] = useState('');
+    const [textSearch, setTextSearch] = useState('Nổi Bật');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -92,6 +62,34 @@ function HomeNews({ navigation }: any): React.JSX.Element {
         }
     }, [refetchFavorites]);
 
+
+    // useEffect(() => {
+
+    // }, []);
+
+
+    useEffect(() => {
+        const fetchData1 = async () => {
+            try {
+                let filteredArticles = [];
+                const articlesData = await getNewsFromApiAsync();
+
+                if (valueSearch.length === 0) {
+                    setTextSearch('Nổi Bật');
+                } else {
+                    setTextSearch(valueSearch);
+                    filteredArticles = articlesData.filter((article: { title: string; }) => article.title.toLowerCase().includes(valueSearch.toLowerCase()));
+                    setArticles(filteredArticles);
+                }
+            } catch (error) {
+                console.error("Error fetching articles:", error);
+            }
+        };
+
+        fetchData1();
+    }, [valueSearch]);
+
+
     useFocusEffect(
         React.useCallback(() => {
             const fetchData = async () => {
@@ -102,10 +100,14 @@ function HomeNews({ navigation }: any): React.JSX.Element {
                     console.error("Error fetching articles:", error);
                 }
 
-            }; const fetchData1 = async () => {
+            };
+            const fetchData1 = async () => {
                 try {
+                    setValueSearch("");
                     const articlesData = await getNewsFromApiAsync();
-                    setArticles(articlesData);
+                    articlesData.sort((a: { viewCount: number; }, b: { viewCount: number; }) => b.viewCount - a.viewCount);
+                    const topFourArticles = articlesData.slice(0, 4);
+                    setArticles(topFourArticles);
                 } catch (error) {
                     console.error("Error fetching articles:", error);
                 }
@@ -114,18 +116,6 @@ function HomeNews({ navigation }: any): React.JSX.Element {
             fetchData();
         }, [])
     );
-
-
-
-    const handlePress = (index: number) => {
-        setPressedIndex(index);
-        // Retrieve the ID of the selected category
-        const categoryId = categories[index].id;
-        console.log('Selected category ID:', categoryId);
-    };
-
-    ////////////////////////////////
-    // Wherever you're handling article press
 
     const handleArticlePress = (articleId: string) => {
         console.log(articleId);
@@ -155,8 +145,6 @@ function HomeNews({ navigation }: any): React.JSX.Element {
                         .then(() => {
 
                             console.log("Favorite deleted successfully");
-                            setRefetchFavorites(true); // Cập nhật state chia sẻ để yêu cầu tải lại dữ liệu yêu thích
-
                         })
                         .catch((error) => {
                             console.error("Error deleting favorite:", error);
@@ -174,8 +162,6 @@ function HomeNews({ navigation }: any): React.JSX.Element {
                         .then((response) => {
                             if (response.status === 201) {
                                 console.log("Favorite added successfully");
-                                setRefetchFavorites(true); // Cập nhật state chia sẻ để yêu cầu tải lại dữ liệu yêu thích
-
                             } else {
                                 console.log("Failed to add favorite");
                             }
@@ -191,11 +177,8 @@ function HomeNews({ navigation }: any): React.JSX.Element {
 
     };
 
-
-
     const handleArticleOnPress = async (article: Article) => {
         console.log(article.title);
-
         try {
             const updatedArticle = {
                 ...article,
@@ -214,7 +197,7 @@ function HomeNews({ navigation }: any): React.JSX.Element {
                 const updatedArticles = articles.map(a => a.id === article.id ? updatedArticle : a);
                 setArticles(updatedArticles);
 
-                navigation.navigate("ReadNews", { article: updatedArticle });
+                navigation.push("ReadNews", { article: updatedArticle });
             } else {
                 console.error('Failed to update article viewCount');
             }
@@ -222,6 +205,17 @@ function HomeNews({ navigation }: any): React.JSX.Element {
             console.error('Error updating article viewCount:', error);
         }
     };
+
+
+
+
+
+
+    const handleInputSearch = (valueSearch: string) => {
+        setValueSearch(valueSearch);
+    };
+
+
 
     const renderArticle = ({ item }: { item: Article }) => {
         return (
@@ -240,64 +234,47 @@ function HomeNews({ navigation }: any): React.JSX.Element {
 
     };
 
-    const filteredArticles = pressedIndex === 0 ? articles : articles.filter(article => article.id_category === categories[pressedIndex].id);
+
+
     return (
-
         <Container>
-            <Header />
-
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-
-                {categories.map((category, index) => (
-                    <TouchableOpacity key={index} onPress={() => handlePress(index)}>
-                        <View style={[styles.item, pressedIndex === index ? styles.itemPressed : null]}>
-                            <View>
-                                <Text style={[styles.text, pressedIndex === index ? styles.textPressed : null]}>
-                                    {category.name}
-                                </Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                ))}
-            </ScrollView>
+            <View style={styles.item}>
+                <SearchText handleInputChange={handleInputSearch}
+                    value={valueSearch}
+                    placeholderText="Tìm kiếm">
+                </SearchText>
+                <Text style={styles.text}>{textSearch}</Text>
+                {/* <TouchableOpacity style={styles.btn}>
+                    <Text style={styles.text}>Tìm</Text>
+                </TouchableOpacity> */}
+            </View>
 
             <FlatList
-                data={filteredArticles}
+                data={articles}
                 renderItem={renderArticle}
                 keyExtractor={item => item.id} // Assuming each article has a unique id
                 showsVerticalScrollIndicator={false}
             />
-
-
         </Container>
     );
 }
 
 const styles = StyleSheet.create({
     item: {
-        width: 80,
-        marginRight: 10,
-        backgroundColor: Color.ui_white_10,
-        paddingHorizontal: 10,
-        marginBottom: 10,
-        paddingTop: 10
+        flexDirection: 'column',
     },
     text: {
-        color: Color.ui_black_10,
-        fontWeight: 'bold',
-        fontSize: 17,
-        textAlign: 'center',
-    },
-    textPressed: {
         color: Color.ui_blue_10,
+        fontWeight: 'bold',
+        fontSize: 22,
+        paddingHorizontal: 10,
+        marginTop: 10
     },
-    itemPressed: {
-        backgroundColor: Color.ui_white_10, // Keep background color unchanged when pressed
-    },
+    btn: {
+        padding: 5,
+        paddingLeft: 10,
+    }
+
 });
 
-export default HomeNews;
-
-
-
-
+export default SearchNews;

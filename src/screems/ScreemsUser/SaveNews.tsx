@@ -8,6 +8,7 @@ import CardNews from '../../components/CardNews';
 import { useSelector } from 'react-redux';
 import Url from '../../constants/Url';
 import FormatTimeAgo from '../../constants/time';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface Favorites {
     id: string;
@@ -34,6 +35,7 @@ function SaveNews({ navigation }: any) {
     const [favorites, setFavorites] = useState<Favorites[]>([]);
     const [articles, setArticles] = useState<Article[]>([]);
     const info = useSelector((state: any) => state.personalInfo);
+    const [refetchFavorites, setRefetchFavorites] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -59,10 +61,35 @@ function SaveNews({ navigation }: any) {
             }
         };
 
-        fetchData();
-    }, [favorites]);
+        if (refetchFavorites) {
+            fetchData();
+            setRefetchFavorites(false); // Đặt lại state sau khi tải xong
+        }
+    }, [refetchFavorites]);
 
+    useFocusEffect(
+        React.useCallback(() => {
+            const fetchData = async () => {
+                try {
+                    const favoritesData = await getFavoritesFromApiAsync();
+                    setFavorites(favoritesData);
+                } catch (error) {
+                    console.error("Error fetching articles:", error);
+                }
 
+            };
+            const fetchData1 = async () => {
+                try {
+                    const articlesData = await getNewsFromApiAsync();
+                    setArticles(articlesData);
+                } catch (error) {
+                    console.error("Error fetching articles:", error);
+                }
+            };
+            fetchData();
+            fetchData1();
+        }, [])
+    );
 
 
     ////////////////////////////////
@@ -87,6 +114,8 @@ function SaveNews({ navigation }: any) {
                     })
                         .then(() => {
                             console.log("Favorite deleted successfully");
+                            setRefetchFavorites(true); // Cập nhật state chia sẻ để yêu cầu tải lại dữ liệu yêu thích
+
                         })
                         .catch((error) => {
                             console.error("Error deleting favorite:", error);
@@ -96,9 +125,33 @@ function SaveNews({ navigation }: any) {
     };
 
 
-    const handleArticleOnPress = (article: Article) => {
+    const handleArticleOnPress = async (article: Article) => {
         console.log(article.title);
-        navigation.navigate("ReadNews", { article });
+        try {
+            const updatedArticle = {
+                ...article,
+                viewCount: article.viewCount + 1
+            };
+
+            const response = await fetch(`http://${Url.IP_WF}:${Url.PORT}/articles/${article.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedArticle)
+            });
+
+            if (response.ok) {
+                const updatedArticles = articles.map(a => a.id === article.id ? updatedArticle : a);
+                setArticles(updatedArticles);
+
+                navigation.push("ReadNews", { article: updatedArticle });
+            } else {
+                console.error('Failed to update article viewCount');
+            }
+        } catch (error) {
+            console.error('Error updating article viewCount:', error);
+        }
     };
 
     const renderArticle = ({ item }: { item: Article }) => {

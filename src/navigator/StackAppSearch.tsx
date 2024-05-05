@@ -3,31 +3,24 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import ReadNews from '../screems/ScreemsUser/ReadNews';
-import HomeNews from '../screems/ScreemsUser/HomeNews';
-// import ScreemLogin from '../screems/ScreemsLogin/ScreemLogin';
-
-import HomeScreemUser from '../screems/ScreemsUser/HomeScreemUser';
+import SearchNews from '../screems/ScreemsUser/SearchNews';
 const Stack = createStackNavigator();
 
-const StackAppNavigator = () => {
+const StackAppSearch = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
 
             {/* <Stack.Screen name="Login" component={ScreemLogin} /> */}
 
             <Stack.Screen
-                name="Home"
-                component={HomeNews}
+                name="SearchNews"
+                component={SearchNews}
                 options={{ headerShown: false }} // Ẩn thanh điều hướng cho màn hình "Home"
             />
             <Stack.Screen name="ReadNews" component={ReadNews} />
-            <Stack.Screen name="HomeUser" component={HomeScreemUser} />
-
-
-
 
         </Stack.Navigator>
     );
 }
 
-export default StackAppNavigator;
+export default StackAppSearch;
