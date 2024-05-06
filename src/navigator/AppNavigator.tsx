@@ -29,6 +29,12 @@ function App() {
     const TabBarIconSearch = ({ size, color }: any) => (
         <Icon name="search" size={size} color={color} />
     );
+
+
+
+    const TabBarIconUser = ({ size, color }: any) => (
+        <Icon name="person" size={size} color={color} />
+    );
     return (
         <Tab.Navigator
             screenOptions={{
@@ -98,10 +104,18 @@ function App() {
             <Tab.Screen
                 name="Users"
                 component={StackAppUserr}
-                options={{
-                    tabBarIcon: ({ size, color }) => (
-                        <Icon name="person" size={size} color={color} />
-                    ),
+                options={({ route }) => {
+                    const focusedRouteName = getFocusedRouteNameFromRoute(route) || '';
+                    if (!['Contact', 'PasswordChange', 'Security', 'Profile'].includes(focusedRouteName)) {
+                        return {
+                            tabBarStyle: { display: 'flex' },
+                            tabBarIcon: TabBarIconUser, // Pass the Icon component as props
+                        };
+                    }
+                    return {
+                        tabBarStyle: { display: 'none' },
+                        tabBarIcon: TabBarIconUser, // Pass the Icon component as props
+                    };
                 }}
             />
 

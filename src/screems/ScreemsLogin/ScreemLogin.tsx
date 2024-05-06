@@ -68,6 +68,8 @@ function ScreemLogin({ navigation }: any): React.ReactElement {
             console.log(foundUser.firstName, foundUser.lastName);
             dispatch(updateTTUser(foundUser.id, foundUser.firstName, foundUser.lastName, foundUser.image, foundUser.email, foundUser.password));
             navigation.navigate('Main');
+            setTextPass("");
+            setTextEmail("");
         } else {
             Alert.alert('Invalid email or password');
         }

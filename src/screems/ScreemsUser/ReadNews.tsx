@@ -276,7 +276,7 @@ const ReadNews = ({ navigation, route }: any) => {
             <View>
                 <View>
                     <View style={styles.imageContainer}>
-                        <Image source={{ uri: article.urlToImage }} style={styles.image} />
+                        {article.urlToImage != '' ? <Image source={{ uri: article.urlToImage }} style={styles.image} /> : <Image source={{ uri: 'https://cdn.pixabay.com/photo/2021/07/21/12/49/error-6482984_1280.png' }} style={styles.image} />}
                     </View>
                 </View>
                 <View style={styles.iconContainer}>
