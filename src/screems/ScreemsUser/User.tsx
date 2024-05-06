@@ -15,7 +15,6 @@ function UserScreen(): React.JSX.Element {
     const info = useSelector((state: any) => state.personalInfo);
 
     const handleDangXuat = () => {
-        // navigation.navigate('Login');
         navi.navigate('Login');
     };
     const handleProfile = () => {

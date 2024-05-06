@@ -32,7 +32,7 @@ function SearchText({ handleInputChange, value, placeholderText, secureTextEntry
 
 const styles = StyleSheet.create({
     container: {
-        width: 300,
+        width: 360,
     },
     textInput: {
         height: 45,

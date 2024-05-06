@@ -13,7 +13,7 @@ const Stack = createStackNavigator();
 
 const StackAppUser = () => {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="User" screenOptions={{ headerShown: false }}>
             <Stack.Screen
                 name="User"
                 component={User}
@@ -22,7 +22,7 @@ const StackAppUser = () => {
             />
             <Stack.Screen name="ScreemLogin" component={ScreemLogin} />
             <Stack.Screen name='Contact' component={Contacts} />
-            <Stack.Screen name="PasswordChange" component={PasswordChange} />
+            <Stack.Screen name='PasswordChange' component={PasswordChange} />
             <Stack.Screen name="Security" component={Security} />
             <Stack.Screen name="Profile" component={Profile} />
         </Stack.Navigator>
