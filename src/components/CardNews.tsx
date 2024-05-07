@@ -83,12 +83,12 @@ const styles = StyleSheet.create({
         marginVertical: 15,
     },
     container: {
-        marginTop: 30,
+        marginTop: 10,
     },
     card: {
         flexDirection: 'row-reverse',
         backgroundColor: Color.ui_grey_10,
-        height: 110,
+        height: 105,
         width: "100%",
         borderRadius: 10,
     },
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
         width: 150,
         height: 100,
         borderRadius: 10,
-        marginTop: -30,
+        marginTop: -10,
     },
     icon: {
         width: 20,

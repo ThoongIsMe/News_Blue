@@ -23,7 +23,9 @@ function Profile() {
     const toggleOptions = () => {
         setShowOptions(!showOptions);
     };
-
+    const closeOptions = () => {
+        setShowOptions(false);
+    };
 
     const [valuePass, setTextPass] = useState('');
     const handleInputPassChange = (pass: string) => {
@@ -46,6 +48,7 @@ function Profile() {
     };
     return (
         <Container>
+
             <View style={styles.ViewText}>
                 <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack()}>
                     <Icon name="chevron-back" color={Color.ui_blue_10} size={30} />
@@ -53,6 +56,7 @@ function Profile() {
                 <Text style={styles.Text}>Thông tin cá nhân</Text>
             </View>
             <KeyboardAvoidingView
+            
                 behavior={Platform.OS === "ios" ? "padding" : undefined}
                 keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}>
                 <ScrollView>
@@ -64,7 +68,7 @@ function Profile() {
                         <Icon style={{ marginLeft: 100, marginTop: -40, backgroundColor: Color.ui_grey_10, padding: 7, borderRadius: 30 }} name='camera-outline' color={Color.ui_blue_10} size={30} />
                         <Text style={styles.imgText}>Thay đổi hình</Text>
                     </TouchableOpacity>
-
+                    
                     <InputText
                         handleInputChange={handleInputFirstNameChange}
                         value={valueFirstName}>
@@ -107,7 +111,9 @@ function Profile() {
 
                 </ScrollView>
             </KeyboardAvoidingView>
-
+            {showOptions && (
+                <TouchableOpacity  style={styles.overlay} onPress={closeOptions} />
+                )}
             {showOptions && (
                 <>
                     <View style={styles.container}>
@@ -118,11 +124,11 @@ function Profile() {
                         }}>Profile Photo</Text>
                         <View style={styles.photoOptions}>
                             <TouchableOpacity style={styles.optionButton}>
-                                <Icon name="camera-outline" color="#0077b6" size={24} />
+                                <Icon name="camera-outline" color='black' size={24} />
                                 <Text style={styles.optionText}>Camera</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.optionButton}>
-                                <Icon name="image-outline" color="#0077b6" size={24} />
+                                <Icon name="image-outline" color="black" size={24} />
                                 <Text style={styles.optionText}>Gallery</Text>
                             </TouchableOpacity>
                         </View>
@@ -163,7 +169,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 25,
         paddingVertical: 10,
-        backgroundColor: Color.ui_red_10,
+        backgroundColor: Color.ui_blue_10,
+        borderRadius:20,
+        borderColor: Color.ui_black_10,
+        borderWidth: 1,
+        margin:10,
     },
     optionText: {
         marginLeft: 5,
