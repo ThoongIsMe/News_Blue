@@ -6,9 +6,27 @@ import FormatTimeAgo from '../../constants/time';
 import getAudio from '../../helper/getAudio';
 //audio
 import Sound from 'react-native-sound';
-
+import { useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
+import { getFavoritesFromApiAsync, getHeartsFromApiAsync } from '../../helper/api';
+import uuid from 'react-native-uuid';
+import Url from '../../constants/Url';
 
 Sound.setCategory('Playback');
+interface Favorites {
+    id: string;
+    publishedAt: string;
+    id_favorite: string;
+    id_user: string;
+}
+
+
+interface Hearts {
+    id: string;
+    publishedAt: string;
+    articleID: string;
+    userID: string;
+}
 
 const ReadNews = ({ navigation, route }: any) => {
     const { article } = route.params;
@@ -17,6 +35,196 @@ const ReadNews = ({ navigation, route }: any) => {
     const [audio, setAudio] = useState<Sound | null>(null);
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
+    const [favorite, setFavorites] = useState<Favorites[]>([]);
+    const [refetchFavorites, setRefetchFavorites] = useState(false);
+
+
+    const [heart, setHeart] = useState<Hearts[]>([]);
+    const [refetchHeart, setRefetchHeart] = useState(false);
+    const [countHeart, setCountHeart] = useState(0);
+
+    const info = useSelector((state: any) => state.personalInfo);
+
+    useEffect(() => {
+        const count = heart.reduce((acc, item) => {
+            return item.articleID === article.id ? acc + 1 : acc;
+        }, 0);
+        setCountHeart(count);
+    }, [heart, article.id]);
+
+    const fetchDataHeart = async () => {
+        try {
+            const heartData = await getHeartsFromApiAsync();
+            setHeart(heartData);
+        } catch (error) {
+            console.error("Error fetching heart:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (refetchHeart) {
+            fetchDataHeart();
+            setRefetchHeart(false);
+        }
+    }, [refetchHeart]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchDataHeart();
+        }, [])
+    );
+
+
+    const fetchData = async () => {
+        try {
+            const favoritesData = await getFavoritesFromApiAsync();
+            setFavorites(favoritesData);
+        } catch (error) {
+            console.error("Error fetching favoritesData:", error);
+        }
+
+    };
+
+    useEffect(() => {
+        if (refetchFavorites) {
+            fetchData();
+            setRefetchFavorites(false);
+        }
+    }, [refetchFavorites]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchData();
+        }, [])
+    );
+
+    const handleHeartPress = (articleId: string) => {
+        console.log(articleId);
+        let id = uuid.v4();
+        let heartData = {
+            id: id,
+            userID: info.id,
+            articleID: articleId,
+        };
+        let url_api = `http://${Url.IP_WF}:${Url.PORT}/heart`;
+
+        // Check if the favorite entry already exists
+        fetch(url_api)
+            .then((response) => response.json())
+            .then((hearts) => {
+                const existingFavorite = hearts.find(
+                    (heart: any) => heart.userID === info.id && heart.articleID === articleId
+                );
+
+                if (existingFavorite) {
+                    // If the favorite already exists, delete it
+                    let deleteUrl = `${url_api}/${existingFavorite.id}`;
+
+                    fetch(deleteUrl, {
+                        method: 'DELETE',
+                    })
+                        .then(() => {
+
+                            console.log("Favorite deleted successfully");
+                            setRefetchHeart(true); // Cập nhật state chia sẻ để yêu cầu tải lại dữ liệu yêu thích
+
+                        })
+                        .catch((error) => {
+                            console.error("Error deleting favorite:", error);
+                        });
+                } else {
+                    // If the favorite does not exist, add it
+                    fetch(url_api, {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(heartData),
+                    })
+                        .then((response) => {
+                            if (response.status === 201) {
+                                console.log("heart added successfully");
+                                setRefetchHeart(true); // Cập nhật state chia sẻ để yêu cầu tải lại dữ liệu yêu thích
+
+                            } else {
+                                console.log("Failed to add heart");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error adding heart:", error);
+                        });
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching heart:", error);
+            });
+
+    };
+
+    const handleArticlePress = (articleId: string) => {
+        console.log(articleId);
+        let id = uuid.v4();
+        let favoriteData = {
+            id: id,
+            userID: info.id,
+            articleID: articleId,
+        };
+        let url_api = `http://${Url.IP_WF}:${Url.PORT}/favorites`;
+
+        // Check if the favorite entry already exists
+        fetch(url_api)
+            .then((response) => response.json())
+            .then((favorites) => {
+                const existingFavorite = favorites.find(
+                    (favorite: any) => favorite.userID === info.id && favorite.articleID === articleId
+                );
+
+                if (existingFavorite) {
+                    // If the favorite already exists, delete it
+                    let deleteUrl = `${url_api}/${existingFavorite.id}`;
+
+                    fetch(deleteUrl, {
+                        method: 'DELETE',
+                    })
+                        .then(() => {
+
+                            console.log("Favorite deleted successfully");
+                            setRefetchFavorites(true); // Cập nhật state chia sẻ để yêu cầu tải lại dữ liệu yêu thích
+
+                        })
+                        .catch((error) => {
+                            console.error("Error deleting favorite:", error);
+                        });
+                } else {
+                    // If the favorite does not exist, add it
+                    fetch(url_api, {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(favoriteData),
+                    })
+                        .then((response) => {
+                            if (response.status === 201) {
+                                console.log("Favorite added successfully");
+                                setRefetchFavorites(true); // Cập nhật state chia sẻ để yêu cầu tải lại dữ liệu yêu thích
+
+                            } else {
+                                console.log("Failed to add favorite");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error adding favorite:", error);
+                        });
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching favorites:", error);
+            });
+
+    };
 
     useEffect(() => {
         var data = article.title + article.description + article.content + article.author;
@@ -68,7 +276,7 @@ const ReadNews = ({ navigation, route }: any) => {
             <View>
                 <View>
                     <View style={styles.imageContainer}>
-                        <Image source={{ uri: article.urlToImage }} style={styles.image} />
+                        {article.urlToImage != '' ? <Image source={{ uri: article.urlToImage }} style={styles.image} /> : <Image source={{ uri: 'https://cdn.pixabay.com/photo/2021/07/21/12/49/error-6482984_1280.png' }} style={styles.image} />}
                     </View>
                 </View>
                 <View style={styles.iconContainer}>
@@ -76,8 +284,12 @@ const ReadNews = ({ navigation, route }: any) => {
                         <Icon name="chevron-back" color={Color.ui_white_10} size={30} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.bookmarkIcon}>
-                        <Icon name="bookmark" color={Color.ui_white_10} size={30} />
+                    <TouchableOpacity style={styles.bookmarkIcon} onPress={() => handleArticlePress(article.id)}>
+                        {favorite.find((fav: any) => fav.articleID === article.id && fav.userID === info.id)
+                            ? <Icon name="bookmark" color={Color.ui_yellow_10} size={30} />
+
+                            : <Icon name="bookmark" color={Color.ui_white_10} size={30} />
+                        }
                     </TouchableOpacity>
                 </View>
 
@@ -86,6 +298,16 @@ const ReadNews = ({ navigation, route }: any) => {
                         <Text style={{ color: Color.ui_white_10 }}>{FormatTimeAgo(article.publishedAt)}</Text>
                     </View>
                     <View style={styles.stats}>
+                        <TouchableOpacity onPress={() => handleHeartPress(article.id)}>
+                            {heart.find((fav: any) => fav.articleID === article.id && fav.userID === info.id)
+                                ? <Icon name="heart" color={Color.ui_red_10} size={30} />
+
+                                : <Icon name="heart" color={Color.ui_white_10} size={30} />
+                            }
+                        </TouchableOpacity>
+                        <Text style={{ color: Color.ui_white_10, padding: 10 }}>{countHeart}</Text>
+
+
                         <Icon name="eye" color={Color.ui_white_10} size={30} />
                         <Text style={{ color: Color.ui_white_10, paddingLeft: 10 }}>{article.viewCount}</Text>
                     </View>

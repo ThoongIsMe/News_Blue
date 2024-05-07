@@ -23,4 +23,7 @@ export async function sendMail(email, pass) {
 
 }
 
+// sendMail("thongdzpro100@gmail.com", "mật_khẩu_cần_gửi");
+
+
 export default sendMail;

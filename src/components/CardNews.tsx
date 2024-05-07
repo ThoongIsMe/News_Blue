@@ -69,10 +69,10 @@ const CardNews: React.FC<PrimaryCardProps> = ({ children, onPress, onClickToucha
                             )}
                         </View>
                     </View>
-                    <Image
+                    {img != '' ? <Image
                         source={{ uri: img }}
                         style={styles.image}
-                    />
+                    /> : ''}
                 </Pressable>
             </View>
         </View>
