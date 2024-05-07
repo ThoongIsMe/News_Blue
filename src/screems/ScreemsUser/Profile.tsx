@@ -124,11 +124,11 @@ function Profile() {
                         }}>Profile Photo</Text>
                         <View style={styles.photoOptions}>
                             <TouchableOpacity style={styles.optionButton}>
-                                <Icon name="camera-outline" color="#0077b6" size={24} />
+                                <Icon name="camera-outline" color='black' size={24} />
                                 <Text style={styles.optionText}>Camera</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.optionButton}>
-                                <Icon name="image-outline" color="#0077b6" size={24} />
+                                <Icon name="image-outline" color="black" size={24} />
                                 <Text style={styles.optionText}>Gallery</Text>
                             </TouchableOpacity>
                         </View>
@@ -169,7 +169,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 25,
         paddingVertical: 10,
-        backgroundColor: Color.ui_red_10,
+        backgroundColor: Color.ui_blue_10,
+        borderRadius:20,
+        borderColor: Color.ui_black_10,
+        borderWidth: 1,
+        margin:10,
     },
     optionText: {
         marginLeft: 5,
