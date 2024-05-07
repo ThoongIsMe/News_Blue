@@ -4,6 +4,7 @@ import Color from '../constants/Colors'
 // Trong ScreemsUser/User.tsx
 
 
+
 interface SettingAvtProps {
     onPress: () => void;
     img: string;
@@ -19,6 +20,7 @@ const SettingAvt: React.FC<SettingAvtProps> = ({ onPress, img, textName, textEma
                 source={{ uri: img }}
                 style={{ width: 100, height: 100, borderRadius: 50, marginRight: 10 }}
             />
+
             <View>
                 <Text style={styles.textName}>{textName}</Text>
                 <Text style={styles.textEmail}>{textEmail}</Text>
@@ -27,6 +29,7 @@ const SettingAvt: React.FC<SettingAvtProps> = ({ onPress, img, textName, textEma
                     <Text style={styles.btn}>Đăng xuất</Text>
                 </TouchableOpacity>
             </View>
+
         </View>
     );
 }

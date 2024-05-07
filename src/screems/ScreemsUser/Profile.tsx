@@ -13,11 +13,16 @@ function Profile() {
     const navigation = useNavigation();
     const [getPassVisible, setPassVisible] = useState(false);
     const info = useSelector((state: any) => state.personalInfo);
+    const [showOptions, setShowOptions] = useState(false);
 
     // const [valueimg, setTextImg] = useState('');
     // const handleInputimgChange = (img: string) => {
     //     setTextImg(img);
     // };
+
+    const toggleOptions = () => {
+        setShowOptions(!showOptions);
+    };
 
 
     const [valuePass, setTextPass] = useState('');
@@ -51,11 +56,12 @@ function Profile() {
                 behavior={Platform.OS === "ios" ? "padding" : undefined}
                 keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}>
                 <ScrollView>
-                    <TouchableOpacity style={styles.img} onPress={handlePress}>
+                    <TouchableOpacity style={styles.img} onPress={toggleOptions}>
                         <Image
                             source={{ uri: info.image }}
                             style={styles.imgOver}
                         />
+                        <Icon style={{ marginLeft: 100, marginTop: -40, backgroundColor: Color.ui_grey_10, padding: 7, borderRadius: 30 }} name='camera-outline' color={Color.ui_blue_10} size={30} />
                         <Text style={styles.imgText}>Thay đổi hình</Text>
                     </TouchableOpacity>
 
@@ -101,10 +107,77 @@ function Profile() {
 
                 </ScrollView>
             </KeyboardAvoidingView>
+
+            {showOptions && (
+                <>
+                    <View style={styles.container}>
+                        <Text style={{
+                            color: Color.ui_white_10,
+                            fontWeight: "bold",
+                            fontSize: 20,
+                        }}>Profile Photo</Text>
+                        <View style={styles.photoOptions}>
+                            <TouchableOpacity style={styles.optionButton}>
+                                <Icon name="camera-outline" color="#0077b6" size={24} />
+                                <Text style={styles.optionText}>Camera</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.optionButton}>
+                                <Icon name="image-outline" color="#0077b6" size={24} />
+                                <Text style={styles.optionText}>Gallery</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </>
+            )}
+
         </Container>
     );
 }
 const styles = StyleSheet.create({
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Màu nền tối
+    },
+    container: {
+        marginHorizontal: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Color.ui_blue_10,
+        borderRadius: 16,
+        marginTop: -380,
+    },
+    photoOptions: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 5,
+        alignSelf: 'center', // Thêm dòng này để căn giữa theo chiều ngang
+    },
+    optionButton: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingHorizontal: 25,
+        paddingVertical: 10,
+        backgroundColor: Color.ui_red_10,
+    },
+    optionText: {
+        marginLeft: 5,
+        fontSize: 16,
+    },
+    removeButton: {
+        marginLeft: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        backgroundColor: 'lightgray',
+        borderRadius: 5,
+    },
+
+
     ViewText: {
         justifyContent: 'center',
         alignItems: 'center',
