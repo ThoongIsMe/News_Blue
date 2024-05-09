@@ -50,6 +50,11 @@ function ScreemRegister({ navigation }: any): React.ReactElement {
         return user.some(user => user.email.toLowerCase() === searchTerm.toLowerCase());
     };
 
+    function validateEmail(email: string): boolean {
+        // Sử dụng một biểu thức chính quy để kiểm tra định dạng email
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
 
 
     const [valueFirstName, setTextFirstName] = useState('');
@@ -81,57 +86,61 @@ function ScreemRegister({ navigation }: any): React.ReactElement {
 
 
     const handlePress = () => {
-        if (valueFirstName !== '' && valueLastName !== '' && valueEmail !== ''
-            && valueComfirmPass !== '' && valueComfirmPass === valuePass) {
-            if (!isEmailExists(valueEmail)) {
-                let id = uuid.v4();
-                let imageUrl = 'https://source.unsplash.com/random';
-                let objUser = {
-                    id: id,
-                    firstName: valueFirstName,
-                    lastName: valueLastName,
-                    image: imageUrl,
-                    email: valueEmail,
-                    password: valueComfirmPass,
-                };
-                console.log(objUser);
-                let url_api = `http://${Url.IP_WF}:${Url.PORT}/users`;
-                fetch(url_api, {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(objUser),
-                })
-                    .then((response) => {
-                        if (response.status == 201) {
-                            if (response.ok) {
-                                Alert.alert(
-                                    'Đăng ký tài khoản thành công!!',
-                                    '',
-                                    [
-                                        {
-                                            text: 'OK',
-                                            onPress: () => {
-                                                navigation.goBack();
-                                            }
-                                        }
-                                    ]
-                                );
-                            } else {
-                                console.error('Error updating password');
-                            }
-                        }
+        if (validateEmail(valueEmail)) {
+            if (valueFirstName !== '' && valueLastName !== '' && valueEmail !== ''
+                && valueComfirmPass !== '' && valueComfirmPass === valuePass) {
+                if (!isEmailExists(valueEmail)) {
+                    let id = uuid.v4();
+                    let imageUrl = 'https://source.unsplash.com/random';
+                    let objUser = {
+                        id: id,
+                        firstName: valueFirstName,
+                        lastName: valueLastName,
+                        image: imageUrl,
+                        email: valueEmail,
+                        password: valueComfirmPass,
+                    };
+                    console.log(objUser);
+                    let url_api = `http://${Url.IP_WF}:${Url.PORT}/users`;
+                    fetch(url_api, {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(objUser),
                     })
-                    .catch((error) => { console.log(error); })
+                        .then((response) => {
+                            if (response.status == 201) {
+                                if (response.ok) {
+                                    Alert.alert(
+                                        'Đăng ký tài khoản thành công!!',
+                                        '',
+                                        [
+                                            {
+                                                text: 'OK',
+                                                onPress: () => {
+                                                    navigation.goBack();
+                                                }
+                                            }
+                                        ]
+                                    );
+                                } else {
+                                    console.error('Error updating password');
+                                }
+                            }
+                        })
+                        .catch((error) => { console.log(error); })
+                }
+                else {
+                    Alert.alert("Email đã tồn tại, vui lòng nhập email khác");
+                }
             }
             else {
-                Alert.alert("Email đã tồn tại, vui lòng nhập email khác");
+                Alert.alert("Đăng ký tài khoản thất bại, vui lòng nhập đầy đủ thông tin");
             }
-        }
-        else {
-            Alert.alert("Đăng ký tài khoản thất bại, vui lòng nhập đầy đủ thông tin");
+        } else {
+            Alert.alert("Vui lòng nhập email hợp lệ");
         }
 
 
