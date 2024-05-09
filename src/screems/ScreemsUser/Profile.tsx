@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView, PermissionsAndroid, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Container from '../../components/Container';
 import Color from '../../constants/Colors';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -7,18 +7,27 @@ import { useNavigation } from '@react-navigation/native';
 import PrimaryButton from '../../components/PrimaryButton';
 import InputText from '../../components/InputText';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import Url from '../../constants/Url';
+import { updateImgUser } from '../../redux/actions/updateAction';
+import { store } from '../../redux/store';
+
+
+
+export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 // Trong ScreemsUser/User.tsx
 function Profile() {
     const navigation = useNavigation();
     const [getPassVisible, setPassVisible] = useState(false);
     const info = useSelector((state: any) => state.personalInfo);
     const [showOptions, setShowOptions] = useState(false);
-
-    // const [valueimg, setTextImg] = useState('');
+    const [valueimg, setTextImg] = useState(info.image);
     // const handleInputimgChange = (img: string) => {
     //     setTextImg(img);
     // };
+    const dispatch = useAppDispatch();
 
     const toggleOptions = () => {
         setShowOptions(!showOptions);
@@ -43,9 +52,84 @@ function Profile() {
     };
 
 
-    const handlePress = () => {
-        console.log(1);
+    const handlePress = async () => {
+        if (valuePass === info.password && valueFirstName !== '' && valueLastName !== '') {
+            const apiUrl = `http://${Url.IP_WF}:${Url.PORT}/users/${info.id}`; // Assuming you have the userId
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ firstName: valueFirstName, lastName: valueLastName, image: valueimg }),
+                });
+
+                if (response.ok) {
+                    Alert.alert(
+                        'Đổi mật khẩu thành công!!',
+                        '',
+                        [
+                            {
+                                text: 'OK',
+                                onPress: () => {
+                                    navigation.goBack();
+                                    console.log('Password updated', info);
+                                }
+                            }
+                        ]
+                    );
+                    dispatch(updateImgUser(valueFirstName, valueLastName, valueimg));
+                } else {
+                    console.error('Error updating password');
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+            }
+        } else {
+            Alert.alert('Vui lòng kiểm trả lại thông tin cho hợp lệ!');
+        }
     };
+
+
+
+    const requestImageCameraPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log("Camera permission given");
+                const result: any = await launchCamera({ mediaType: 'photo', cameraType: 'front' })
+                console.log(result.assets[0].uri);
+                setTextImg(result.assets[0].uri);
+                setShowOptions(false);
+            } else {
+                console.log("Camera permission denied");
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    };
+
+
+    const requestImageLibraryPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log("Camera permission given");
+                // const result: any = await launchCamera({ mediaType: 'photo', cameraType: 'front' })
+                const result: any = await launchImageLibrary({ mediaType: 'photo' })
+                console.log(result.assets[0].uri);
+                setTextImg(result.assets[0].uri);
+                setShowOptions(false);
+            } else {
+                console.log("Camera permission denied");
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    };
+
+
     return (
         <Container>
 
@@ -56,19 +140,19 @@ function Profile() {
                 <Text style={styles.Text}>Thông tin cá nhân</Text>
             </View>
             <KeyboardAvoidingView
-            
+
                 behavior={Platform.OS === "ios" ? "padding" : undefined}
                 keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}>
                 <ScrollView>
                     <TouchableOpacity style={styles.img} onPress={toggleOptions}>
                         <Image
-                            source={{ uri: info.image }}
+                            source={{ uri: valueimg }}
                             style={styles.imgOver}
                         />
                         <Icon style={{ marginLeft: 100, marginTop: -40, backgroundColor: Color.ui_grey_10, padding: 7, borderRadius: 30 }} name='camera-outline' color={Color.ui_blue_10} size={30} />
                         <Text style={styles.imgText}>Thay đổi hình</Text>
                     </TouchableOpacity>
-                    
+
                     <InputText
                         handleInputChange={handleInputFirstNameChange}
                         value={valueFirstName}>
@@ -112,23 +196,24 @@ function Profile() {
                 </ScrollView>
             </KeyboardAvoidingView>
             {showOptions && (
-                <TouchableOpacity  style={styles.overlay} onPress={closeOptions} />
-                )}
+                <TouchableOpacity style={styles.overlay} onPress={closeOptions} />
+            )}
             {showOptions && (
                 <>
                     <View style={styles.container}>
                         <Text style={{
-                            color: Color.ui_white_10,
+                            color: Color.ui_blue_10,
                             fontWeight: "bold",
-                            fontSize: 20,
+                            fontSize: 24,
+                            padding: 10,
                         }}>Profile Photo</Text>
                         <View style={styles.photoOptions}>
-                            <TouchableOpacity style={styles.optionButton}>
-                                <Icon name="camera-outline" color='black' size={24} />
+                            <TouchableOpacity style={styles.optionButton} onPress={requestImageCameraPermission}>
+                                <Icon name="camera-outline" color={Color.ui_blue_10} size={24} />
                                 <Text style={styles.optionText}>Camera</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.optionButton}>
-                                <Icon name="image-outline" color="black" size={24} />
+                            <TouchableOpacity style={styles.optionButton} onPress={requestImageLibraryPermission}>
+                                <Icon name="image-outline" color={Color.ui_blue_10} size={24} />
                                 <Text style={styles.optionText}>Gallery</Text>
                             </TouchableOpacity>
                         </View>
@@ -152,9 +237,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Color.ui_blue_10,
+        backgroundColor: Color.ui_grey_10,
         borderRadius: 16,
-        marginTop: -380,
+        marginTop: -400,
     },
     photoOptions: {
         flexDirection: 'row',
@@ -169,15 +254,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 25,
         paddingVertical: 10,
-        backgroundColor: Color.ui_blue_10,
-        borderRadius:20,
-        borderColor: Color.ui_black_10,
+        backgroundColor: '#ebebeb',
+        borderRadius: 20,
+        borderColor: Color.ui_blue_10,
         borderWidth: 1,
-        margin:10,
+        margin: 10,
     },
     optionText: {
         marginLeft: 5,
         fontSize: 16,
+        color: Color.ui_blue_10,
     },
     removeButton: {
         marginLeft: 10,
@@ -232,3 +318,6 @@ const styles = StyleSheet.create({
     }
 })
 export default Profile;
+
+
+
