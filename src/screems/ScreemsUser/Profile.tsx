@@ -41,12 +41,12 @@ function Profile() {
         setTextPass(pass);
     };
 
-    const [valueFirstName, setTextFirstName] = useState('');
+    const [valueFirstName, setTextFirstName] = useState(info.firstName || '');
     const handleInputFirstNameChange = (name: string) => {
         setTextFirstName(name);
     };
 
-    const [valueLastName, setTextLastName] = useState('');
+    const [valueLastName, setTextLastName] = useState(info.lastName || '');
     const handleInputLastNameChange = (name: string) => {
         setTextLastName(name);
     };
@@ -67,7 +67,7 @@ function Profile() {
 
                 if (response.ok) {
                     Alert.alert(
-                        'Đổi mật khẩu thành công!!',
+                        'Đổi thông tin thành công!!',
                         '',
                         [
                             {
@@ -86,7 +86,16 @@ function Profile() {
             } catch (error) {
                 console.error('Network error:', error);
             }
-        } else {
+        }
+        else if (valueFirstName === '' || valueLastName === '')
+            {
+                Alert.alert('Họ hoặc tên không được rỗng!');
+            }
+        else if (valuePass !== info.password)
+            {
+                Alert.alert('Sai mật khẩu!');
+            }
+         else {
             Alert.alert('Vui lòng kiểm trả lại thông tin cho hợp lệ!');
         }
     };
