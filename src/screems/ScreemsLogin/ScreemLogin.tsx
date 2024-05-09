@@ -34,6 +34,7 @@ function ScreemLogin({ navigation }: any): React.ReactElement {
         image: string;
         email: string;
         password: string;
+        role: string;
 
     }
 
@@ -66,7 +67,7 @@ function ScreemLogin({ navigation }: any): React.ReactElement {
         const foundUser = user.find(u => u.email === valueEmail && u.password === valuePass);
         if (foundUser) {
             console.log(foundUser.firstName, foundUser.lastName);
-            dispatch(updateTTUser(foundUser.id, foundUser.firstName, foundUser.lastName, foundUser.image, foundUser.email, foundUser.password));
+            dispatch(updateTTUser(foundUser.id, foundUser.firstName, foundUser.lastName, foundUser.image, foundUser.email, foundUser.password, foundUser.role));
             navigation.navigate('Main');
             setTextPass("");
             setTextEmail("");
