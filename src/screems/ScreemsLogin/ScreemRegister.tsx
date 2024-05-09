@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Button, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Color from '../../constants/Colors'
 import InputText from '../../components/InputText';
@@ -10,10 +10,55 @@ import Container from '../../components/Container';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Url from '../../constants/Url';
 import uuid from 'react-native-uuid';
+import { getUserFromApiAsync } from '../../helper/api';
+
+
+
+
 function ScreemRegister({ navigation }: any): React.ReactElement {
     const [getPassVisible, setPassVisible] = useState(false);
     const [getPassVisible1, setPassVisible1] = useState(false);
+    const [user, setUser] = useState<Users[]>([]);
+
+
+
+    interface Users {
+        id: string;
+        lastName: string;
+        firstName: string;
+        image: string;
+        email: string;
+        password: string;
+        role: string;
+
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const userData = await getUserFromApiAsync();
+                setUser(userData);
+            } catch (error) {
+                console.error("Error fetching user:", error);
+            }
+        };
+        fetchData();
+    }, []);
+
+
+    const isEmailExists = (searchTerm: string): boolean => {
+        return user.some(user => user.email.toLowerCase() === searchTerm.toLowerCase());
+    };
+
+    function validateEmail(email: string): boolean {
+        // Sử dụng một biểu thức chính quy để kiểm tra định dạng email
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+
+
     const [valueFirstName, setTextFirstName] = useState('');
+
     const handleInputFirstNameChange = (name: string) => {
         setTextFirstName(name);
     };
@@ -41,31 +86,64 @@ function ScreemRegister({ navigation }: any): React.ReactElement {
 
 
     const handlePress = () => {
-        let id = uuid.v4();
-        let imageUrl = 'https://source.unsplash.com/random';
-        let objUser = {
-            id: id,
-            firstName: valueFirstName,
-            lastName: valueLastName,
-            image: imageUrl,
-            email: valueEmail,
-            password: valueComfirmPass,
-        };
-        console.log(objUser);
-        let url_api = `http://${Url.IP_WF}:${Url.PORT}/users`;
-        fetch(url_api, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(objUser),
-        })
-            .then((response) => {
-                if (response.status == 201)
-                    Alert.alert("Thêm thành công");
-            })
-            .catch((error) => { console.log(error); })
+        if (validateEmail(valueEmail)) {
+            if (valueFirstName !== '' && valueLastName !== '' && valueEmail !== ''
+                && valueComfirmPass !== '' && valueComfirmPass === valuePass) {
+                if (!isEmailExists(valueEmail)) {
+                    let id = uuid.v4();
+                    let imageUrl = 'https://source.unsplash.com/random';
+                    let objUser = {
+                        id: id,
+                        firstName: valueFirstName,
+                        lastName: valueLastName,
+                        image: imageUrl,
+                        email: valueEmail,
+                        password: valueComfirmPass,
+                    };
+                    console.log(objUser);
+                    let url_api = `http://${Url.IP_WF}:${Url.PORT}/users`;
+                    fetch(url_api, {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(objUser),
+                    })
+                        .then((response) => {
+                            if (response.status == 201) {
+                                if (response.ok) {
+                                    Alert.alert(
+                                        'Đăng ký tài khoản thành công!!',
+                                        '',
+                                        [
+                                            {
+                                                text: 'OK',
+                                                onPress: () => {
+                                                    navigation.goBack();
+                                                }
+                                            }
+                                        ]
+                                    );
+                                } else {
+                                    console.error('Error updating password');
+                                }
+                            }
+                        })
+                        .catch((error) => { console.log(error); })
+                }
+                else {
+                    Alert.alert("Email đã tồn tại, vui lòng nhập email khác");
+                }
+            }
+            else {
+                Alert.alert("Đăng ký tài khoản thất bại, vui lòng nhập đầy đủ thông tin");
+            }
+        } else {
+            Alert.alert("Vui lòng nhập email hợp lệ");
+        }
+
+
     };
     return (
         <KeyboardAvoidingView
