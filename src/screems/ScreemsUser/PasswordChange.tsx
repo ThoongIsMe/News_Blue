@@ -76,7 +76,12 @@ function PasswordChange() {
             } catch (error) {
                 console.error('Network error:', error);
             }
-        } else {
+        } 
+        else if (valueNewPass !== valueComfirmPass)
+            {
+                Alert.alert('Mật khẩu xác nhận không trùng!');
+            }
+        else {
             Alert.alert('Vui lòng kiểm trả lại thông tin cho hợp lệ!');
         }
     };
