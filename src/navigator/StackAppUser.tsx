@@ -12,6 +12,11 @@ import ReadNews from '../screems/ScreemsUser/ReadNews';
 // admin
 import ManagerNews from '../screems/ScreensAdmin/ManagerNews';
 import ManagerAccounts from '../screems/ScreensAdmin/ManagerAccounts';
+import AddCategories from '../screems/ScreensAdmin/AddCategories';
+import AddNews from '../screems/ScreensAdmin/AddNews';
+
+
+
 const Stack = createStackNavigator();
 
 const StackAppUser = () => {
@@ -33,7 +38,8 @@ const StackAppUser = () => {
             <Stack.Screen name="ReadNews" component={ReadNews} />
 
             <Stack.Screen name="ManagerAccounts" component={ManagerAccounts} />
-
+            <Stack.Screen name="AddCategories" component={AddCategories} />
+            <Stack.Screen name="AddNews" component={AddNews} />
 
         </Stack.Navigator>
     );
