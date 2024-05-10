@@ -45,12 +45,30 @@ function UserScreen(): React.JSX.Element {
                 <BtnSetting onPress={handlePasswordChange} icon={'shield-checkmark-outline'} namebtn={'Thay đổi mật khẩu'} />
             </View>
 
-
-            <View style={{ paddingVertical: 20 }}>
+            {info.role === "user" && <View style={{ paddingVertical: 20 }}>
                 <Text style={styles.title}>Chính sách pháp lý</Text>
                 <BtnSetting onPress={handleSecurity} icon={'server-outline'} namebtn={'Chính sách bảo mật'} />
                 <BtnSetting onPress={handleContact} icon={'call-outline'} namebtn={'Liên hệ'} />
-            </View>
+            </View>}
+
+
+            {info.role === "admin" && (
+                <>
+                    <View style={{ paddingVertical: 20 }}>
+                        <Text style={styles.title}>Quản lý chung</Text>
+                        <BtnSetting onPress={handleProfile} icon={'newspaper-outline'} namebtn={'Bài báo'} />
+                        <BtnSetting onPress={handlePasswordChange} icon={'shield-outline'} namebtn={'Tài khoản'} />
+                    </View>
+
+                    <View style={{ paddingVertical: 20 }}>
+                        <Text style={styles.title}>Thêm báo mới</Text>
+                        <BtnSetting onPress={handleProfile} icon={'add-circle-outline'} namebtn={'Thêm chủ đề mới'} />
+                        <BtnSetting onPress={handleProfile} icon={'add-circle-outline'} namebtn={'Thêm bài báo mới'} />
+                    </View>
+                </>
+            )}
+
+
         </Container>
     );
 }

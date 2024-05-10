@@ -17,7 +17,7 @@ const Header = () => {
                 />
             </TouchableOpacity>
 
-            <CircularImageIcon imageSource={{ uri: info.image }} navigateToTab="User" />
+            <CircularImageIcon imageSource={{ uri: info.image }} navigateToTab="Users" />
 
         </View>
     );
