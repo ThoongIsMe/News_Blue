@@ -1,25 +1,16 @@
 import * as React from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import SearchText from '../../components/SearchText';
 import { useEffect, useState } from 'react';
 import Container from '../../components/Container';
 import Color from '../../constants/Colors';
-import { getFavoritesFromApiAsync, getNewsFromApiAsync } from '../../helper/api';
-import { useSelector } from 'react-redux';
-import uuid from 'react-native-uuid';
+import { getNewsFromApiAsync } from '../../helper/api';
 import Url from '../../constants/Url';
 import CardNews from '../../components/CardNews';
 import FormatTimeAgo from '../../constants/time';
 import { useFocusEffect } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-
-interface Favorites {
-    id: string;
-    userID: string;
-    articleID: string;
-    dateAdded: string;
-
-}
 
 interface Article {
     id: string;
@@ -36,36 +27,18 @@ interface Article {
 
 
 // Trong ScreemsUser/User.tsx
-function SearchNews({ navigation }: any) {
-    const info = useSelector((state: any) => state.personalInfo);
+function ManagerNews({ navigation }: any) {
+    // const info = useSelector((state: any) => state.personalInfo);
 
 
-    const [favorite, setFavorites] = useState<Favorites[]>([]);
     const [articles, setArticles] = useState<Article[]>([]);
-    const [refetchFavorites, setRefetchFavorites] = useState(false);
     const [valueSearch, setValueSearch] = useState('');
     const [textSearch, setTextSearch] = useState('Nổi Bật');
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const favoritesData = await getFavoritesFromApiAsync();
-                setFavorites(favoritesData);
-            } catch (error) {
-                console.error("Error fetching articles:", error);
-            }
 
-        };
-        if (refetchFavorites) {
-            fetchData();
-            setRefetchFavorites(false); // Đặt lại state sau khi tải xong
-        }
-    }, [refetchFavorites]);
+    const [refetchArticles, setRefetchArticles] = useState(false);
 
 
-    // useEffect(() => {
-
-    // }, []);
 
 
     useEffect(() => {
@@ -90,92 +63,85 @@ function SearchNews({ navigation }: any) {
     }, [valueSearch]);
 
 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const favoritesData = await getNewsFromApiAsync();
+                setArticles(favoritesData);
+            } catch (error) {
+                console.error("Error fetching articles:", error);
+            }
+
+        };
+        if (refetchArticles) {
+            fetchData();
+            setRefetchArticles(false); // Đặt lại state sau khi tải xong
+        }
+    }, [refetchArticles]);
+
     useFocusEffect(
         React.useCallback(() => {
-            const fetchData = async () => {
-                try {
-                    const favoritesData = await getFavoritesFromApiAsync();
-                    setFavorites(favoritesData);
-                } catch (error) {
-                    console.error("Error fetching articles:", error);
-                }
-
-            };
             const fetchData1 = async () => {
                 try {
                     setValueSearch("");
                     const articlesData = await getNewsFromApiAsync();
                     articlesData.sort((a: { viewCount: number; }, b: { viewCount: number; }) => b.viewCount - a.viewCount);
-                    const topFourArticles = articlesData.slice(0, 4);
-                    setArticles(topFourArticles);
+                    setArticles(articlesData);
                 } catch (error) {
                     console.error("Error fetching articles:", error);
                 }
             };
             fetchData1();
-            fetchData();
         }, [])
     );
 
     const handleArticlePress = (articleId: string) => {
+        let url_api = `http://${Url.IP_WF}:${Url.PORT}/articles`;
         console.log(articleId);
-        let id = uuid.v4();
-        let favoriteData = {
-            id: id,
-            userID: info.id,
-            articleID: articleId,
-        };
-        let url_api = `http://${Url.IP_WF}:${Url.PORT}/favorites`;
 
-        // Check if the favorite entry already exists
-        fetch(url_api)
-            .then((response) => response.json())
-            .then((favorites) => {
-                const existingFavorite = favorites.find(
-                    (favorite: any) => favorite.userID === info.id && favorite.articleID === articleId
-                );
+        // Display confirmation dialog
+        Alert.alert(
+            'Xác nhận',
+            'Bạn có chắc chắn muốn xóa bài báo này không?',
+            [
+                {
+                    text: 'Hủy',
+                    style: 'cancel',
+                },
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        fetch(url_api)
+                            .then((response) => response.json())
+                            .then((articles) => {
+                                const existingArticle = articles.find(
+                                    (article: any) => article.id === articleId
+                                );
 
-                if (existingFavorite) {
-                    // If the favorite already exists, delete it
-                    let deleteUrl = `${url_api}/${existingFavorite.id}`;
-
-                    fetch(deleteUrl, {
-                        method: 'DELETE',
-                    })
-                        .then(() => {
-                            setRefetchFavorites(true); // Cập nhật state chia sẻ để yêu cầu tải lại dữ liệu yêu thích
-                            console.log("Favorite deleted successfully");
-                        })
-                        .catch((error) => {
-                            console.error("Error deleting favorite:", error);
-                        });
-                } else {
-                    // If the favorite does not exist, add it
-                    fetch(url_api, {
-                        method: 'POST',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(favoriteData),
-                    })
-                        .then((response) => {
-                            if (response.status === 201) {
-                                setRefetchFavorites(true); // Cập nhật state chia sẻ để yêu cầu tải lại dữ liệu yêu thích
-                                console.log("Favorite added successfully");
-                            } else {
-                                console.log("Failed to add favorite");
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Error adding favorite:", error);
-                        });
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching favorites:", error);
-            });
-
+                                if (existingArticle) {
+                                    let deleteUrl = `${url_api}/${existingArticle.id}`;
+                                    fetch(deleteUrl, {
+                                        method: 'DELETE',
+                                    })
+                                        .then(() => {
+                                            console.log("Xóa bài viết thành công");
+                                            setRefetchArticles(true);
+                                        })
+                                        .catch((error) => {
+                                            console.error("Lỗi khi xóa bài viết:", error);
+                                        });
+                                } else {
+                                    console.log("Không tìm thấy bài viết cần xóa");
+                                }
+                            })
+                            .catch((error) => {
+                                console.error("Lỗi khi lấy dữ liệu bài viết:", error);
+                            });
+                    },
+                },
+            ]
+        );
     };
 
     const handleArticleOnPress = async (article: Article) => {
@@ -226,34 +192,37 @@ function SearchNews({ navigation }: any) {
                 onClickTouchableDelete={() => handleArticlePress(item.id)} // You might want to remove quotes around item.id
                 time={FormatTimeAgo(item.publishedAt)}
                 img={item.urlToImage}
-                user={favorite.find((fav: any) => fav.articleID === item.id && fav.userID === info.id) ? 2 : 1}
+                user={4}
                 bool={false}
             >
                 {item.title}
             </CardNews>
         );
-
     };
+
 
 
 
     return (
         <Container>
+            <View style={styles.ViewText}>
+                <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack()}>
+                    <Icon name="chevron-back" color={Color.ui_blue_10} size={30} />
+                </TouchableOpacity>
+                <Text style={styles.Text}>Danh sách bài báo</Text>
+            </View>
             <View style={styles.item}>
                 <SearchText handleInputChange={handleInputSearch}
                     value={valueSearch}
                     placeholderText="Tìm kiếm">
                 </SearchText>
                 <Text style={styles.text}>{textSearch}</Text>
-                {/* <TouchableOpacity style={styles.btn}>
-                    <Text style={styles.text}>Tìm</Text>
-                </TouchableOpacity> */}
             </View>
 
             <FlatList
                 data={articles}
-                renderItem={renderArticle}
-                keyExtractor={item => item.id} // Assuming each article has a unique id
+                renderItem={({ item }) => renderArticle({ item })}
+                keyExtractor={item => item.id}
                 showsVerticalScrollIndicator={false}
             />
         </Container>
@@ -269,13 +238,29 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 22,
         paddingHorizontal: 10,
-        marginTop: 10
+        paddingVertical: 10,
     },
     btn: {
         padding: 5,
         paddingLeft: 10,
-    }
+    },
+    ViewText: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    Text: {
+        color: Color.ui_blue_10,
+        fontWeight: "bold",
+        fontSize: 20,
+        marginTop: -28,
+        paddingBottom: 20,
+    },
+    backIcon: {
+        marginRight: 'auto',
+        marginLeft: -10,
+        marginTop: -10,
+    },
 
 });
 
-export default SearchNews;
+export default ManagerNews;

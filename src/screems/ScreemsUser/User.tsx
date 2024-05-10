@@ -30,6 +30,16 @@ function UserScreen(): React.JSX.Element {
     const handleContact = () => {
         navi.navigate('Contact');
     };
+
+
+    const handleManagerNews = () => {
+        navi.navigate('ManagerNews');
+    };
+
+
+    const handleManagerAccounts = () => {
+        navi.navigate('ManagerAccounts');
+    };
     return (
         <Container>
             <View>
@@ -56,8 +66,8 @@ function UserScreen(): React.JSX.Element {
                 <>
                     <View style={{ paddingVertical: 20 }}>
                         <Text style={styles.title}>Quản lý chung</Text>
-                        <BtnSetting onPress={handleProfile} icon={'newspaper-outline'} namebtn={'Bài báo'} />
-                        <BtnSetting onPress={handlePasswordChange} icon={'shield-outline'} namebtn={'Tài khoản'} />
+                        <BtnSetting onPress={handleManagerNews} icon={'newspaper-outline'} namebtn={'Bài báo'} />
+                        <BtnSetting onPress={handleManagerAccounts} icon={'shield-outline'} namebtn={'Tài khoản'} />
                     </View>
 
                     <View style={{ paddingVertical: 20 }}>
