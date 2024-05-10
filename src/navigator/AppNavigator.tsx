@@ -106,7 +106,7 @@ function App() {
                 component={StackAppUserr}
                 options={({ route }) => {
                     const focusedRouteName = getFocusedRouteNameFromRoute(route) || '';
-                    if (!['Contact', 'PasswordChange', 'Security', 'Profile'].includes(focusedRouteName)) {
+                    if (!['Contact', 'PasswordChange', 'Security', 'Profile', 'ManagerNews'].includes(focusedRouteName)) {
                         return {
                             tabBarStyle: { display: 'flex' },
                             tabBarIcon: TabBarIconUser, // Pass the Icon component as props

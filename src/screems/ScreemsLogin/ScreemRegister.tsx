@@ -98,6 +98,7 @@ function ScreemRegister({ navigation }: any): React.ReactElement {
                         lastName: valueLastName,
                         image: imageUrl,
                         email: valueEmail,
+                        role: "user",
                         password: valueComfirmPass,
                     };
                     console.log(objUser);

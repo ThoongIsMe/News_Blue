@@ -6,9 +6,12 @@ import ScreemLogin from '../screems/ScreemsLogin/ScreemLogin';
 import PasswordChange from '../screems/ScreemsUser/PasswordChange';
 import Profile from '../screems/ScreemsUser/Profile';
 import Security from '../screems/ScreemsUser/Security';
-
 import { User, Contacts } from '../screems/index';
+import ReadNews from '../screems/ScreemsUser/ReadNews';
 
+// admin
+import ManagerNews from '../screems/ScreensAdmin/ManagerNews';
+import ManagerAccounts from '../screems/ScreensAdmin/ManagerAccounts';
 const Stack = createStackNavigator();
 
 const StackAppUser = () => {
@@ -25,6 +28,13 @@ const StackAppUser = () => {
             <Stack.Screen name='PasswordChange' component={PasswordChange} />
             <Stack.Screen name="Security" component={Security} />
             <Stack.Screen name="Profile" component={Profile} />
+
+            <Stack.Screen name="ManagerNews" component={ManagerNews} />
+            <Stack.Screen name="ReadNews" component={ReadNews} />
+
+            <Stack.Screen name="ManagerAccounts" component={ManagerAccounts} />
+
+
         </Stack.Navigator>
     );
 }
