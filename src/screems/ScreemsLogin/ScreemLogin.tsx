@@ -17,7 +17,16 @@ import { store } from '../../redux/store';
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
+interface Users {
+    id: string;
+    lastName: string;
+    firstName: string;
+    image: string;
+    email: string;
+    password: string;
+    role: string;
 
+}
 
 function ScreemLogin({ navigation }: any): React.ReactElement {
     const [getPassVisible, setPassVisible] = useState(false);
@@ -27,16 +36,7 @@ function ScreemLogin({ navigation }: any): React.ReactElement {
 
     const info = useSelector((state: any) => state.personalInfo);
     const dispatch = useAppDispatch();
-    interface Users {
-        id: string;
-        lastName: string;
-        firstName: string;
-        image: string;
-        email: string;
-        password: string;
-        role: string;
 
-    }
 
     useEffect(() => {
         const fetchData = async () => {
