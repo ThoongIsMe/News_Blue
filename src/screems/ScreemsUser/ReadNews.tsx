@@ -271,6 +271,10 @@ const ReadNews = ({ navigation, route }: any) => {
         }
     };
 
+    const handleDanhGia = () => {
+        navigation.navigate('Comments');
+    };
+
     return (
         <View style={{ flex: 1 }}>
             <View>
@@ -315,19 +319,29 @@ const ReadNews = ({ navigation, route }: any) => {
             </View>
 
             <ScrollView >
-                <TouchableOpacity style={[styles.bookmarkIcon, { flexDirection: 'row' }]} onPress={playPause}>
-                    <View style={{
-                        padding: 5,
-                    }}>
+                <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity onPress={handleDanhGia}>
                         <Text style={{
                             color: Color.ui_blue_10, fontSize: 23,
                             fontWeight: 'bold',
-                        }}>Đọc</Text>
-                    </View>
-                    {isPlaying ? <Icon name="pause-circle-outline" color={Color.ui_black_10} size={40} />
-                        : <Icon name="play-circle-outline" color={Color.ui_black_10} size={40} />}
+                            paddingVertical: 6,
+                            paddingLeft: 19,
+                        }}>Đánh giá</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.bookmarkIcon, { flexDirection: 'row' }]} onPress={playPause}>
+                        <View style={{
+                            padding: 5,
+                        }}>
+                            <Text style={{
+                                color: Color.ui_blue_10, fontSize: 23,
+                                fontWeight: 'bold',
+                            }}>Đọc</Text>
+                        </View>
+                        {isPlaying ? <Icon name="pause-circle-outline" color={Color.ui_black_10} size={40} />
+                            : <Icon name="play-circle-outline" color={Color.ui_black_10} size={40} />}
 
-                </TouchableOpacity>
+                    </TouchableOpacity>
+                </View>
                 <Text style={[styles.title, styles.textSpacing, styles.centerText]}>{article.title}</Text>
                 <Text style={[styles.description, styles.textSpacing, styles.centerText]}>{article.description}</Text>
                 <Text style={[styles.content, styles.textSpacing, styles.centerText]}>{article.content}</Text>

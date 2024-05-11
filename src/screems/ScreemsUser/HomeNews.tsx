@@ -241,6 +241,14 @@ function HomeNews({ navigation }: any): React.JSX.Element {
     };
 
     const filteredArticles = pressedIndex === 0 ? articles : articles.filter(article => article.id_category === categories[pressedIndex].id);
+
+    const sortedFilteredArticles = [...filteredArticles].sort((a, b) => {
+        const dateA = new Date(parseInt(a.publishedAt, 10));
+        const dateB = new Date(parseInt(b.publishedAt, 10));
+        return dateB.getTime() - dateA.getTime();
+    });
+
+
     return (
 
         <Container>
@@ -262,7 +270,7 @@ function HomeNews({ navigation }: any): React.JSX.Element {
             </ScrollView>
 
             <FlatList
-                data={filteredArticles}
+                data={sortedFilteredArticles}
                 renderItem={renderArticle}
                 keyExtractor={item => item.id} // Assuming each article has a unique id
                 showsVerticalScrollIndicator={false}
