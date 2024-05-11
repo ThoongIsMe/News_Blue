@@ -76,11 +76,10 @@ function PasswordChange() {
             } catch (error) {
                 console.error('Network error:', error);
             }
-        } 
-        else if (valueNewPass !== valueComfirmPass)
-            {
-                Alert.alert('Mật khẩu xác nhận không trùng!');
-            }
+        }
+        else if (valueNewPass !== valueComfirmPass) {
+            Alert.alert('Mật khẩu xác nhận không trùng!');
+        }
         else {
             Alert.alert('Vui lòng kiểm trả lại thông tin cho hợp lệ!');
         }
@@ -111,7 +110,7 @@ function PasswordChange() {
                         handleInputChange={handleInputPassChange}
                         value={valuePass}
                         secureTextEntry={getPassVisible ? false : true}>
-                        Mật khẩu
+                        Mật khẩu hiện tại
                     </InputText>
                     <View style={{ alignItems: 'flex-end', marginTop: -40 }}>
                         {getPassVisible ?
@@ -150,7 +149,7 @@ function PasswordChange() {
                         handleInputChange={handleInputComfirmPassChange}
                         value={valueComfirmPass}
                         secureTextEntry={getPassVisible1 ? false : true}>
-                        Comfirm Password
+                        Xác nhận mật khẩu mới
                     </InputText>
                     <View style={{ alignItems: 'flex-end', marginTop: -40 }}>
                         {getPassVisible1 ?
