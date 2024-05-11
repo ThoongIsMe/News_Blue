@@ -172,15 +172,18 @@ function AddNews({ navigation }: any) {
                         fontWeight: 'bold',
                         fontSize: 16,
                         paddingVertical: 20,
+                        marginTop:15,
                     }}>Hình ảnh</Text>
                     <TouchableOpacity 
                      style={{ 
                         marginVertical: 17, 
                         marginLeft: 10, 
-                        marginBottom:50,
+                        marginBottom:20,
+                        marginTop:30,
                         backgroundColor: valueImg !== '' ? Color.ui_blue_10 : Color.ui_grey_20, 
                         padding: 3, 
                         borderRadius: 7, 
+                        justifyContent:'center'
                     }} 
                     onPress={toggleOptions}>
                     <Text>{valueImg !== '' ? 'Đã chọn' : 'Chọn hình'}</Text>
@@ -244,6 +247,7 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         margin:10,
+        marginTop:20,
     },
     overlay: {
         position: 'absolute',
