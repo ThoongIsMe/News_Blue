@@ -36,10 +36,19 @@ function UserScreen(): React.JSX.Element {
         navi.navigate('ManagerNews');
     };
 
+    const handleAddCategories = () => {
+        navi.navigate('AddCategories');
+    };
+
 
     const handleManagerAccounts = () => {
         navi.navigate('ManagerAccounts');
     };
+
+    const handleAddNews = () => {
+        navi.navigate('AddNews');
+    };
+
     return (
         <Container>
             <View>
@@ -72,8 +81,8 @@ function UserScreen(): React.JSX.Element {
 
                     <View style={{ paddingVertical: 20 }}>
                         <Text style={styles.title}>Thêm báo mới</Text>
-                        <BtnSetting onPress={handleProfile} icon={'add-circle-outline'} namebtn={'Thêm chủ đề mới'} />
-                        <BtnSetting onPress={handleProfile} icon={'add-circle-outline'} namebtn={'Thêm bài báo mới'} />
+                        <BtnSetting onPress={handleAddNews} icon={'add-circle-outline'} namebtn={'Thêm chủ đề mới'} />
+                        <BtnSetting onPress={handleAddCategories} icon={'add-circle-outline'} namebtn={'Thêm bài báo mới'} />
                     </View>
                 </>
             )}
