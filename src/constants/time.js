@@ -12,15 +12,15 @@ function formatTimeAgo(publishedAt) {
     const seconds = duration.seconds();
     let timeAgo = '';
     if (years > 0) {
-        timeAgo = `${years} năm, ${months} tháng trước`;
+        timeAgo = `${years} năm trước`;
     } else if (months > 0) {
-        timeAgo = `${months} tháng, ${days} ngày trước`;
+        timeAgo = `${months} tháng trước`;
     } else if (days > 0) {
-        timeAgo = `${days} ngày, ${hours} giờ trước`;
+        timeAgo = `${days} ngày trước`;
     } else if (hours > 0) {
-        timeAgo = `${hours} giờ, ${minutes} phút trước`;
+        timeAgo = `${hours} giờ trước`;
     } else if (minutes > 0) {
-        timeAgo = `${minutes} phút, ${seconds} giây trước`;
+        timeAgo = `${minutes} phút trước`;
     } else {
         timeAgo = `${seconds} giây trước`;
     }

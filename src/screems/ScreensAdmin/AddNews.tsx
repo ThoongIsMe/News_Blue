@@ -1,19 +1,23 @@
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, PermissionsAndroid, StyleSheet, Text, TouchableOpacity, View  } from 'react-native';
 import Container from '../../components/Container';
 import Color from '../../constants/Colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import InputText from '../../components/InputText';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PrimaryButton from '../../components/PrimaryButton';
-import { Dropdown } from "react-native-element-dropdown";
 import { ScrollView } from 'react-native-gesture-handler';
+import { getCategoriesFromApiAsync} from '../../helper/api';
+import { Picker } from '@react-native-picker/picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
-
-
+interface Category {
+    id: string;
+    name: string;
+}
 // Trong ScreemsUser/User.tsx
 function AddNews({ navigation }: any) {
-    const [valueTheLoai, setTextTheLoai] = useState('');
+    const [valueTheLoai, setTextTheLoai] = useState<Category[]>([{ id: '0', name: 'All' }]);
     const [valueTieuDe, setTextTieuDe] = useState('');
     const [valueTacGia, setTextTacGia] = useState('');
 
@@ -21,8 +25,65 @@ function AddNews({ navigation }: any) {
     const [valueUrl, setTextUrl] = useState('');
     const [valueMoTa, setTextMoTa] = useState('');
     const [valueNoiDung, setTextNoiDung] = useState('');
+    const [showOptions, setShowOptions] = useState(false);
+    
+    const [selectedCategory, setSelectedCategory] = useState('0');
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const categoriesData = await getCategoriesFromApiAsync();
+                setTextTheLoai([...categoriesData]);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchData();
+    }, []);
+    const toggleOptions = () => {
+        setShowOptions(!showOptions);
+    };
 
+    const closeOptions = () => {
+        setShowOptions(false);
+    };
 
+    const requestImageCameraPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('Camera permission given');
+                const result: any = await launchCamera({ mediaType: 'photo', cameraType: 'front' })
+                console.log(result.assets[0].uri);
+                setTextImg(result.assets[0].uri);
+                setShowOptions(false);
+            } else {
+                console.log('Camera permission denied');
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    };
+
+    const requestImageLibraryPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('Camera permission given');
+                // const result: any = await launchCamera({ mediaType: 'photo', cameraType: 'front' })
+                const result: any = await launchImageLibrary({ mediaType: 'photo' })
+                console.log(result.assets[0].uri);
+                setTextImg(result.assets[0].uri);
+                setShowOptions(false);
+            } else {
+                console.log('Camera permission denied');
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    };
+    const handleCategoryChange = (itemValue: string) => {
+        setSelectedCategory(itemValue);
+    };
     const handleInputTheLoai = (Title: string) => {
         setTextTheLoai(Title);
     };
@@ -49,6 +110,7 @@ function AddNews({ navigation }: any) {
     const handlePress = () => {
 
     }
+    
     return (
         <ScrollView>
             <Container>
@@ -66,27 +128,21 @@ function AddNews({ navigation }: any) {
                 <View>
                     <Text style={{
                         color: Color.ui_grey_20,
-                        fontWeight: "bold",
+                        fontWeight: 'bold',
                         fontSize: 16,
                         paddingVertical: 20,
                     }}>Thể Loại</Text>
-                    {/* <Dropdown
-
-        data={data}
-        search
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? "Example: Kg - Lb" : "..."}
-        searchPlaceholder="Search..."
-        value={value}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={(item) => {
-            setValue(item.value);
-            setIsFocus(false);
-        }}
-    /> */}
+                    <Picker
+                            selectedValue={selectedCategory}
+                            onValueChange={handleCategoryChange}
+                        >
+                             {selectedCategory === '0' && <Picker.Item label="Chọn thể loại" value="" />}
+                            {valueTheLoai.map(category => (
+                                <Picker.Item key={category.id} label={category.name} value={category.id} />
+                            ))}
+                    </Picker>
+                    
+                    
                 </View>
 
                 <InputText
@@ -113,13 +169,26 @@ function AddNews({ navigation }: any) {
                 <View style={{ flexDirection: 'row' }}>
                     <Text style={{
                         color: Color.ui_grey_20,
-                        fontWeight: "bold",
+                        fontWeight: 'bold',
                         fontSize: 16,
                         paddingVertical: 20,
                     }}>Hình ảnh</Text>
-                    <TouchableOpacity style={{ marginVertical: 17, marginLeft: 10, backgroundColor: Color.ui_grey_20, padding: 3, borderRadius: 7, }}>
-                        <Text>Chọn hình</Text>
+                    <TouchableOpacity 
+                     style={{ 
+                        marginVertical: 17, 
+                        marginLeft: 10, 
+                        marginBottom:50,
+                        backgroundColor: valueImg !== '' ? Color.ui_blue_10 : Color.ui_grey_20, 
+                        padding: 3, 
+                        borderRadius: 7, 
+                    }} 
+                    onPress={toggleOptions}>
+                    <Text>{valueImg !== '' ? 'Đã chọn' : 'Chọn hình'}</Text>
                     </TouchableOpacity>
+                    <Image
+                            source={{ uri: valueImg }}
+                            style={styles.imgOver}
+                        />
                 </View>
                 <InputText
                     handleInputChange={handleInputMotTa}
@@ -127,8 +196,6 @@ function AddNews({ navigation }: any) {
                     placeholderText="">
                     Mô tả
                 </InputText>
-
-
                 <InputText
                     handleInputChange={handleInputNoiDung}
                     value={valueNoiDung}
@@ -142,13 +209,50 @@ function AddNews({ navigation }: any) {
                         Đăng bài
                     </PrimaryButton>
                 </View>
-
+                {showOptions && (
+                <TouchableOpacity style={styles.overlay} onPress={closeOptions} />
+                )}
+                {showOptions && (
+                    <>
+                        <View style={styles.container}>
+                            <Text style={{
+                                color: Color.ui_blue_10,
+                                fontWeight: "bold",
+                                fontSize: 24,
+                                padding: 10,
+                            }}>Profile Photo</Text>
+                            <View style={styles.photoOptions}>
+                                <TouchableOpacity style={styles.optionButton} onPress={requestImageCameraPermission}>
+                                    <Icon name="camera-outline" color={Color.ui_blue_10} size={24} />
+                                    <Text style={styles.optionText}>Camera</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.optionButton} onPress={requestImageLibraryPermission}>
+                                    <Icon name="image-outline" color={Color.ui_blue_10} size={24} />
+                                    <Text style={styles.optionText}>Gallery</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </>
+                )}
             </Container>
         </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    imgOver: {
+        width: 50,
+        height: 50,
+        margin:10,
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Màu nền tối
+    },
     item: {
         flexDirection: 'column',
     },
@@ -163,14 +267,14 @@ const styles = StyleSheet.create({
     },
     Text: {
         color: Color.ui_blue_10,
-        fontWeight: "bold",
+        fontWeight: 'bold',
         fontSize: 20,
         marginTop: -28,
         paddingBottom: 20,
     },
     text: {
         color: Color.ui_black_10,
-        fontWeight: "bold",
+        fontWeight: 'bold',
         fontSize: 20,
         marginTop: -10,
         paddingBottom: 20,
@@ -185,7 +289,39 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 7,
     },
-
+    container: {
+        marginHorizontal: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Color.ui_grey_10,
+        borderRadius: 16,
+        marginTop: -400,
+        marginBottom: 400,
+    },
+    photoOptions: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 5,
+        alignSelf: 'center', // Thêm dòng này để căn giữa theo chiều ngang
+    },
+    optionButton: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingHorizontal: 25,
+        paddingVertical: 10,
+        backgroundColor: '#ebebeb',
+        borderRadius: 20,
+        borderColor: Color.ui_blue_10,
+        borderWidth: 1,
+        margin: 10,
+    },
+    optionText: {
+        marginLeft: 5,
+        fontSize: 16,
+        color: Color.ui_blue_10,
+    },
 });
 
 export default AddNews;

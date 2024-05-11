@@ -46,7 +46,7 @@ function App() {
 
         >
             <Tab.Screen
-                name="TrangChu"
+                name="Trang chủ"
                 component={StackAppNavigatorr}
                 options={({ route }) => {
                     const focusedRouteName = getFocusedRouteNameFromRoute(route);
@@ -64,7 +64,7 @@ function App() {
             />
 
             <Tab.Screen
-                name="Search"
+                name="Tìm kiếm"
                 component={StackAppSearch}
                 options={({ route }) => {
                     const focusedRouteName = getFocusedRouteNameFromRoute(route);
@@ -83,7 +83,7 @@ function App() {
             />
 
             <Tab.Screen
-                name="Save"
+                name="Đã lưu"
                 component={StackAppSave}
                 options={({ route }) => {
                     const focusedRouteName = getFocusedRouteNameFromRoute(route);
@@ -102,7 +102,7 @@ function App() {
 
 
             <Tab.Screen
-                name="Users"
+                name="Tài khoản"
                 component={StackAppUserr}
                 options={({ route }) => {
                     const focusedRouteName = getFocusedRouteNameFromRoute(route) || '';
