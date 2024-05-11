@@ -49,6 +49,7 @@ function UserScreen(): React.JSX.Element {
         navi.navigate('AddNews');
     };
 
+
     return (
         <Container>
             <View>
