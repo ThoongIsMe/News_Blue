@@ -27,10 +27,10 @@ const ShowUser: React.FC<BtnSettingProps> = ({ onPress, imageSource, namebtn, us
             borderRadius: 7, padding: 5, marginVertical: 5,
         }}>
             <View style={{ flexDirection: 'row' }}>
-                <Image
+                {imageSource != '' ? <Image
                     source={{ uri: imageSource }}
                     style={{ width: 60, height: 60, borderRadius: 28, marginRight: 10 }}
-                />
+                /> : ''}
                 <Text style={{ padding: 5, color: Color.ui_black_10, fontSize: 18, fontWeight: "500", textAlign: 'center', textAlignVertical: 'center' }}>{namebtn}</Text>
             </View>
             <Icon name="chevron-forward" color={Color.ui_black_10} size={26} style={{ alignSelf: 'center', justifyContent: 'flex-end' }} />
