@@ -86,7 +86,6 @@ function ManagerNews({ navigation }: any) {
                 try {
                     setValueSearch("");
                     const articlesData = await getNewsFromApiAsync();
-                    articlesData.sort((a: { viewCount: number; }, b: { viewCount: number; }) => b.viewCount - a.viewCount);
                     setArticles(articlesData);
                 } catch (error) {
                     console.error("Error fetching articles:", error);
@@ -96,7 +95,7 @@ function ManagerNews({ navigation }: any) {
         }, [])
     );
 
-    const handleArticlePress = (articleId: string) => {
+    const handleArticleDeletePress = (articleId: string) => {
         let url_api = `http://${Url.IP_WF}:${Url.PORT}/articles`;
         console.log(articleId);
 
@@ -174,22 +173,26 @@ function ManagerNews({ navigation }: any) {
     };
 
 
-
-
-
-
     const handleInputSearch = (valueSearch: string) => {
         setValueSearch(valueSearch);
     };
 
+    const handleArticlePress = (article: Article) => {
+        navigation.navigate("AddNews", { article });
+    }
 
+    const sortedFilteredArticles = [...articles].sort((a, b) => {
+        const dateA = new Date(parseInt(a.publishedAt, 10));
+        const dateB = new Date(parseInt(b.publishedAt, 10));
+        return dateB.getTime() - dateA.getTime();
+    });
 
     const renderArticle = ({ item }: { item: Article }) => {
         return (
             <CardNews
                 onPress={() => handleArticleOnPress(item)}
-                onClickTouchable={() => handleArticlePress(item.id)}
-                onClickTouchableDelete={() => handleArticlePress(item.id)} // You might want to remove quotes around item.id
+                onClickTouchable={() => handleArticlePress(item)}
+                onClickTouchableDelete={() => handleArticleDeletePress(item.id)} // You might want to remove quotes around item.id
                 time={FormatTimeAgo(item.publishedAt)}
                 img={item.urlToImage}
                 user={4}
@@ -220,7 +223,7 @@ function ManagerNews({ navigation }: any) {
             </View>
 
             <FlatList
-                data={articles}
+                data={sortedFilteredArticles}
                 renderItem={({ item }) => renderArticle({ item })}
                 keyExtractor={item => item.id}
                 showsVerticalScrollIndicator={false}

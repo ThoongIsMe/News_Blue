@@ -49,8 +49,8 @@ function App() {
                 name="Trang chủ"
                 component={StackAppNavigatorr}
                 options={({ route }) => {
-                    const focusedRouteName = getFocusedRouteNameFromRoute(route);
-                    if (focusedRouteName !== 'ReadNews') {
+                    const focusedRouteName = getFocusedRouteNameFromRoute(route) || '';
+                    if (!['ReadNews', 'Comments'].includes(focusedRouteName)) {
                         return {
                             tabBarStyle: { display: 'flex' },
                             tabBarIcon: TabBarIcon, // Pass the Icon component as props
@@ -67,7 +67,7 @@ function App() {
                 name="Tìm kiếm"
                 component={StackAppSearch}
                 options={({ route }) => {
-                    const focusedRouteName = getFocusedRouteNameFromRoute(route);
+                    const focusedRouteName = getFocusedRouteNameFromRoute(route) || '';
                     if (focusedRouteName !== 'ReadNews') {
                         return {
                             tabBarStyle: { display: 'flex' },

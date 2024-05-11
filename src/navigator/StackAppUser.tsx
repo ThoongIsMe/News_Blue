@@ -8,7 +8,6 @@ import Profile from '../screems/ScreemsUser/Profile';
 import Security from '../screems/ScreemsUser/Security';
 import { User, Contacts } from '../screems/index';
 import ReadNews from '../screems/ScreemsUser/ReadNews';
-
 // admin
 import ManagerNews from '../screems/ScreensAdmin/ManagerNews';
 import ManagerAccounts from '../screems/ScreensAdmin/ManagerAccounts';

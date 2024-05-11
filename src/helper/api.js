@@ -53,7 +53,17 @@ export const getHeartsFromApiAsync = async() => {
     }
 };
 
+export const getCommentsFromApiAsync = async() => {
+    try {
+        const response = await axios.get(`http://${Url.IP_WF}:${Url.PORT}/comments`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+};
 
 
 
-export default { getNewsFromApiAsync, getCategoriesFromApiAsync, getUserFromApiAsync, getFavoritesFromApiAsync, getHeartsFromApiAsync };
+
+export default { getNewsFromApiAsync, getCategoriesFromApiAsync, getUserFromApiAsync, getCommentsFromApiAsync, getFavoritesFromApiAsync, getHeartsFromApiAsync };

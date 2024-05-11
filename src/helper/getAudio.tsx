@@ -10,8 +10,8 @@ async function getAudio(context: string): Promise<AudioResponse> {
     const response = await fetch(url, {
         method: "POST",
         headers: {
-            // 'api-key': 'pzmj9mjM3U1BUDM0BYvUZuK6hKyTdNSc',
-            'api-key': 'SPgY5xSHD5QPo3VIl6j90Pd90hM5Jc7Z',
+            'api-key': 'pzmj9mjM3U1BUDM0BYvUZuK6hKyTdNSc',
+            // 'api-key': 'SPgY5xSHD5QPo3VIl6j90Pd90hM5Jc7Z',
 
             'speed': '1',
             'voice': 'banmai',

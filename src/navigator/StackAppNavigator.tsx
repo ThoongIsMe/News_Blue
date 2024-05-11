@@ -5,6 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ReadNews from '../screems/ScreemsUser/ReadNews';
 import HomeNews from '../screems/ScreemsUser/HomeNews';
 // import ScreemLogin from '../screems/ScreemsLogin/ScreemLogin';
+import Comments from '../screems/ScreemsUser/Comments';
+
 
 import HomeScreemUser from '../screems/ScreemsUser/HomeScreemUser';
 const Stack = createStackNavigator();
@@ -22,6 +24,7 @@ const StackAppNavigator = () => {
             />
             <Stack.Screen name="ReadNews" component={ReadNews} />
             <Stack.Screen name="HomeUser" component={HomeScreemUser} />
+            <Stack.Screen name="Comments" component={Comments} />
 
 
 
