@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, PermissionsAndroid, StyleSheet, Text, TouchableOpacity, View  } from 'react-native';
+import { Image, PermissionsAndroid, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Container from '../../components/Container';
 import Color from '../../constants/Colors';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -7,7 +7,7 @@ import InputText from '../../components/InputText';
 import { useEffect, useState } from 'react';
 import PrimaryButton from '../../components/PrimaryButton';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getCategoriesFromApiAsync} from '../../helper/api';
+import { getCategoriesFromApiAsync } from '../../helper/api';
 import { Picker } from '@react-native-picker/picker';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
@@ -26,7 +26,7 @@ function AddNews({ navigation }: any) {
     const [valueMoTa, setTextMoTa] = useState('');
     const [valueNoiDung, setTextNoiDung] = useState('');
     const [showOptions, setShowOptions] = useState(false);
-    
+
     const [selectedCategory, setSelectedCategory] = useState('0');
     useEffect(() => {
         const fetchData = async () => {
@@ -110,7 +110,7 @@ function AddNews({ navigation }: any) {
     const handlePress = () => {
 
     }
-    
+
     return (
         <ScrollView>
             <Container>
@@ -130,19 +130,22 @@ function AddNews({ navigation }: any) {
                         color: Color.ui_grey_20,
                         fontWeight: 'bold',
                         fontSize: 16,
-                        paddingVertical: 20,
+                        paddingTop: 20,
                     }}>Thể Loại</Text>
-                    <Picker
+                    <View style={{ borderBottomWidth: 1, borderColor: Color.ui_grey_20, borderRadius: 10, marginLeft: -10 }}>
+                        <Picker
                             selectedValue={selectedCategory}
                             onValueChange={handleCategoryChange}
+
                         >
-                             {selectedCategory === '0' && <Picker.Item label="Chọn thể loại" value="" />}
+                            {selectedCategory === '0' && <Picker.Item label="Chọn thể loại" value="" />}
                             {valueTheLoai.map(category => (
                                 <Picker.Item key={category.id} label={category.name} value={category.id} />
                             ))}
-                    </Picker>
-                    
-                    
+                        </Picker>
+                    </View>
+
+
                 </View>
 
                 <InputText
@@ -187,11 +190,12 @@ function AddNews({ navigation }: any) {
                     }} 
                     onPress={toggleOptions}>
                     <Text>{valueImg !== '' ? 'Đã chọn' : 'Chọn hình'}</Text>
+
                     </TouchableOpacity>
-                    <Image
-                            source={{ uri: valueImg }}
-                            style={styles.imgOver}
-                        />
+                    {valueImg != '' ? <Image
+                        source={{ uri: valueImg }}
+                        style={styles.imgOver}
+                    /> : ''}
                 </View>
                 <InputText
                     handleInputChange={handleInputMotTa}
@@ -213,7 +217,7 @@ function AddNews({ navigation }: any) {
                     </PrimaryButton>
                 </View>
                 {showOptions && (
-                <TouchableOpacity style={styles.overlay} onPress={closeOptions} />
+                    <TouchableOpacity style={styles.overlay} onPress={closeOptions} />
                 )}
                 {showOptions && (
                     <>
@@ -248,6 +252,7 @@ const styles = StyleSheet.create({
         height: 50,
         margin:10,
         marginTop:20,
+
     },
     overlay: {
         position: 'absolute',

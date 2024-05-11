@@ -18,7 +18,7 @@ const CardNews: React.FC<PrimaryCardProps> = ({ children, onPress, onClickToucha
     return (
         <View style={styles.Aa}>
             <View style={styles.container}>
-                <Pressable style={styles.card} android_ripple={{ color: 'red' }} onPress={onPress} >
+                <Pressable style={styles.card} android_ripple={{ color: Color.ui_grey_10 }} onPress={onPress} >
                     <View style={styles.cardContent}>
                         <Text numberOfLines={3} style={styles.textContent} >
                             {children}

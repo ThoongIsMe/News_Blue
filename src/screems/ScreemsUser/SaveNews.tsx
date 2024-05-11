@@ -37,18 +37,18 @@ function SaveNews({ navigation }: any) {
     const info = useSelector((state: any) => state.personalInfo);
     const [refetchFavorites, setRefetchFavorites] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const articlesData = await getNewsFromApiAsync();
-                setArticles(articlesData);
-            } catch (error) {
-                console.error("Error fetching articles:", error);
-            }
-        };
-        console.log("Inf", info.id);
-        fetchData();
-    }, [info.id]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const articlesData = await getNewsFromApiAsync();
+    //             setArticles(articlesData);
+    //         } catch (error) {
+    //             console.error("Error fetching articles:", error);
+    //         }
+    //     };
+    //     console.log("Inf", info.id);
+    //     fetchData();
+    // }, [info.id]);
 
 
     useEffect(() => {
@@ -106,7 +106,6 @@ function SaveNews({ navigation }: any) {
                 );
 
                 if (existingFavorite) {
-                    // If the favorite already exists, delete it
                     let deleteUrl = `${url_api}/${existingFavorite.id}`;
 
                     fetch(deleteUrl, {
