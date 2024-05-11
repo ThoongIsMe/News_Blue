@@ -38,9 +38,9 @@ function ManagerAccounts({ navigation }: any) {
             console.error("Error fetching user:", error);
         }
     };
-    useEffect(() => {
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -50,26 +50,21 @@ function ManagerAccounts({ navigation }: any) {
 
 
 
-    // useEffect(() => {
-    //     const fetchData1 = async () => {
-    //         try {
-    //             let filteredArticles = [];
-    //             const articlesData = await getUserFromApiAsync();
+    useEffect(() => {
+        const fetchData1 = async () => {
+            try {
+                let filteredArticles = [];
+                const userData = await getUserFromApiAsync();
+                filteredArticles = userData.filter((user: { firstName: string; lastName: string }) => user.firstName.toLowerCase().includes(valueSearch.toLowerCase())
+                    || user.lastName.toLowerCase().includes(valueSearch.toLowerCase()));
+                setUser(filteredArticles);
+            } catch (error) {
+                console.error("Error fetching articles:", error);
+            }
+        };
 
-    //             if (valueSearch.length === 0) {
-    //                 setValueSearch('Nổi Bật');
-    //             } else {
-    //                 setValueSearch(valueSearch);
-    //                 filteredArticles = userDF.filter((article: { title: string; }) => article.title.toLowerCase().includes(valueSearch.toLowerCase()));
-    //                 setArticles(filteredArticles);
-    //             }
-    //         } catch (error) {
-    //             console.error("Error fetching articles:", error);
-    //         }
-    //     };
-
-    //     fetchData1();
-    // }, [valueSearch]);
+        fetchData1();
+    }, [valueSearch]);
 
     const handleManagerAccount = (u: Users) => {
         console.log("a" + u.id);

@@ -87,15 +87,13 @@ function Profile() {
                 console.error('Network error:', error);
             }
         }
-        else if (valueFirstName === '' || valueLastName === '')
-            {
-                Alert.alert('Họ hoặc tên không được rỗng!');
-            }
-        else if (valuePass !== info.password)
-            {
-                Alert.alert('Sai mật khẩu!');
-            }
-         else {
+        else if (valueFirstName === '' || valueLastName === '') {
+            Alert.alert('Họ hoặc tên không được rỗng!');
+        }
+        else if (valuePass !== info.password) {
+            Alert.alert('Sai mật khẩu!');
+        }
+        else {
             Alert.alert('Vui lòng kiểm trả lại thông tin cho hợp lệ!');
         }
     };
@@ -154,10 +152,10 @@ function Profile() {
                 keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}>
                 <ScrollView>
                     <TouchableOpacity style={styles.img} onPress={toggleOptions}>
-                        <Image
+                        {valueimg != '' ? <Image
                             source={{ uri: valueimg }}
                             style={styles.imgOver}
-                        />
+                        /> : ''}
                         <Icon style={{ marginLeft: 100, marginTop: -40, backgroundColor: Color.ui_grey_10, padding: 7, borderRadius: 30 }} name='camera-outline' color={Color.ui_blue_10} size={30} />
                         <Text style={styles.imgText}>Thay đổi hình</Text>
                     </TouchableOpacity>
