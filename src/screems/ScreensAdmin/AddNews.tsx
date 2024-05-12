@@ -196,7 +196,7 @@ function AddNews({ navigation }: any) {
                     </TouchableOpacity>
                     <Text style={styles.Text}>Thêm chủ đề mới</Text>
                     <View style={styles.ViewText}>
-                        <Text style={styles.text}>Thông tin</Text>
+                        <Text style={styles.text}>Thông tin bài báo</Text>
                     </View>
                 </View>
 
