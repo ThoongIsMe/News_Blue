@@ -14,7 +14,7 @@ import ManagerAccounts from '../screems/ScreensAdmin/ManagerAccounts';
 import AddCategories from '../screems/ScreensAdmin/AddCategories';
 import AddNews from '../screems/ScreensAdmin/AddNews';
 import DeleteAccount from '../screems/ScreensAdmin/DeleteAccount';
-
+import UpdateNews from '../screems/ScreensAdmin/UpdateNews';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +39,7 @@ const StackAppUser = () => {
             <Stack.Screen name="ManagerAccounts" component={ManagerAccounts} />
             <Stack.Screen name="AddCategories" component={AddCategories} />
             <Stack.Screen name="AddNews" component={AddNews} />
+            <Stack.Screen name="UpdateNews" component={UpdateNews} />
             <Stack.Screen name="DeleteAccount" component={DeleteAccount} />
 
         </Stack.Navigator>

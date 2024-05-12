@@ -11,7 +11,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { getFavoritesFromApiAsync, getHeartsFromApiAsync } from '../../helper/api';
 import uuid from 'react-native-uuid';
 import Url from '../../constants/Url';
-import LottieView from 'lottie-react-native';
 Sound.setCategory('Playback');
 interface Favorites {
     id: string;
@@ -288,9 +287,6 @@ const ReadNews = ({ navigation, route }: any) => {
 
     return (
         <View style={{ flex: 1 }}>
-            {/* <View style={[styles.lotte, StyleSheet.absoluteFillObject]}>
-            <LottieView style={styles.loading} source={require('../../assets/icon/loading.json')} autoPlay loop />
-        </View> */}
             <View>
                 <View>
                     <View style={styles.imageContainer}>
