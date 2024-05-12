@@ -1,8 +1,3 @@
-import { Dimensions, StatusBar } from "react-native";
-
-
-
-
 const Colors = {
     //UI 
     ui_blue_10: "#0380BD",
