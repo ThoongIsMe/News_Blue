@@ -2,20 +2,29 @@ import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import SettingAvt from '../../components/SettingAvt';
 import Container from '../../components/Container';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Color from '../../constants/Colors';
 import BtnSetting from '../../components/BtnSetting';
 import { useNavigation } from '@react-navigation/native';
+import { store } from '../../redux/store';
+import { updateTTUser } from '../../redux/actions/updateAction';
+import { setCheckLoad } from '../../redux/actions/checkLoadActions';
 // Trong ScreemsUser/User.tsx
-
+export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 function UserScreen(): React.JSX.Element {
 
     const navi = useNavigation();
     const info = useSelector((state: any) => state.personalInfo);
+    const dispatch = useAppDispatch();
 
     const handleDangXuat = () => {
+        dispatch(updateTTUser("", "", "", "", "", "", ""));
+        dispatch(setCheckLoad(false));
         navi.navigate('Login');
+
+
     };
     const handleProfile = () => {
         navi.navigate('Profile');

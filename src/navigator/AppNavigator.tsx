@@ -12,7 +12,7 @@ import { Provider } from 'react-redux';
 import { store } from '../redux/store';
 import StackAppSave from './StackAppSave';
 import StackAppSearch from './StackAppSearch';
-// import StackAppUser from './StackAppUser';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -35,6 +35,7 @@ function App() {
     const TabBarIconUser = ({ size, color }: any) => (
         <Icon name="person" size={size} color={color} />
     );
+
     return (
         <Tab.Navigator
             screenOptions={{
@@ -126,7 +127,6 @@ function App() {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function Navigation() {
     return (
-
         <Provider store={store}>
             <NavigationContainer>
                 <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
@@ -137,7 +137,6 @@ export default function Navigation() {
                 </Stack.Navigator>
             </NavigationContainer>
         </Provider>
-
     )
 }
 
