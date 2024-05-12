@@ -9,9 +9,16 @@ import FormatTimeAgo from '../../constants/time';
 import Header from '../../components/Header';
 import uuid from 'react-native-uuid';
 import Url from '../../constants/Url';
-
+import Load from '../HomeScreems/load';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
+
+import { setCheckLoad } from '../../redux/actions/checkLoadActions'
+import { store } from '../../redux/store';
+
+// chuyển useDispatch -> useAppDispatch type store
+export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 interface Category {
     id: string;
     name: string;
@@ -45,9 +52,12 @@ function HomeNews({ navigation }: any): React.JSX.Element {
     const [favorite, setFavorites] = useState<Favorites[]>([]);
 
     const [refetchFavorites, setRefetchFavorites] = useState(false);
+    const [loading, setLoading] = useState(false);
 
 
     const info = useSelector((state: any) => state.personalInfo);
+    const check = useSelector((state: any) => state.checkInfo);
+    console.log(check);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -60,6 +70,13 @@ function HomeNews({ navigation }: any): React.JSX.Element {
         };
         fetchData();
     }, [info]);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (info.image !== '') {
+            dispatch(setCheckLoad(true));
+        }
+    }, [dispatch, info.image]);
 
 
     useEffect(() => {
@@ -113,6 +130,7 @@ function HomeNews({ navigation }: any): React.JSX.Element {
             fetchData1();
             fetchData();
         }, [])
+
     );
 
 
@@ -253,9 +271,8 @@ function HomeNews({ navigation }: any): React.JSX.Element {
 
         <Container>
             <Header />
-
+            {check.checkLoad === false && <Load />}
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-
                 {categories.map((category, index) => (
                     <TouchableOpacity key={index} onPress={() => handlePress(index)}>
                         <View style={[styles.item, pressedIndex === index ? styles.itemPressed : null]}>
@@ -275,13 +292,12 @@ function HomeNews({ navigation }: any): React.JSX.Element {
                 keyExtractor={item => item.id} // Assuming each article has a unique id
                 showsVerticalScrollIndicator={false}
             />
-
-
         </Container>
     );
 }
 
 const styles = StyleSheet.create({
+
     item: {
         width: 80,
         marginRight: 10,
@@ -302,6 +318,7 @@ const styles = StyleSheet.create({
     itemPressed: {
         backgroundColor: Color.ui_white_10, // Keep background color unchanged when pressed
     },
+
 });
 
 export default HomeNews;

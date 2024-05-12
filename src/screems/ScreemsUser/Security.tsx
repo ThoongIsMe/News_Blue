@@ -39,6 +39,7 @@ function Security({ navigation }: any) {
     );
 }
 const styles = StyleSheet.create({
+
     content: {
         color: Color.ui_black_10,
         textAlign: 'justify',
