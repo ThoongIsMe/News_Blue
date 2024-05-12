@@ -20,7 +20,18 @@ interface Favorites {
     id_user: string;
 }
 
-
+interface Article {
+    id: string;
+    author: string;
+    id_category: string;
+    viewCount: number;
+    title: string;
+    description: string;
+    url: string;
+    urlToImage: string;
+    publishedAt: string; // Change the type to string
+    content: string;
+}
 interface Hearts {
     id: string;
     publishedAt: string;
@@ -271,8 +282,8 @@ const ReadNews = ({ navigation, route }: any) => {
         }
     };
 
-    const handleDanhGia = () => {
-        navigation.navigate('Comments');
+    const handleDanhGia = (article: Article) => {
+        navigation.navigate('Comments', { article });
     };
 
     return (
@@ -320,7 +331,7 @@ const ReadNews = ({ navigation, route }: any) => {
 
             <ScrollView >
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={handleDanhGia}>
+                    <TouchableOpacity onPress={() => handleDanhGia(article)}>
                         <Text style={{
                             color: Color.ui_blue_10, fontSize: 23,
                             fontWeight: 'bold',

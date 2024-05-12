@@ -22,7 +22,7 @@ function formatTimeAgo(publishedAt) {
     } else if (minutes > 0) {
         timeAgo = `${minutes} phút trước`;
     } else {
-        timeAgo = `${seconds} giây trước`;
+        timeAgo = `Vừa xong`;
     }
     return timeAgo;
 }

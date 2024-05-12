@@ -13,9 +13,12 @@ interface CmtProps {
     textName: string;
     textCmt: string;
     textDay: string;
+    imgCmt: string;
+    onPress: () => void;
+
 }
 
-const Cmt: React.FC<CmtProps> = ({ img, textName, textCmt, textDay }) => {
+const Cmt: React.FC<CmtProps> = ({ onPress, img, textName, textCmt, textDay, imgCmt }) => {
     const info = useSelector((state: any) => state.personalInfo);
 
     return (
@@ -28,10 +31,17 @@ const Cmt: React.FC<CmtProps> = ({ img, textName, textCmt, textDay }) => {
             <View>
                 <Text style={styles.textName}>{textName}</Text>
                 <Text style={styles.textCmt} >{textCmt}</Text>
+
+                <View style={{ paddingTop: 10 }}>
+                    {imgCmt != '' ? <Image
+                        source={{ uri: imgCmt }}
+                        style={{ width: 220, height: 180, borderRadius: 20, marginRight: 10, }}
+                    /> : ''}
+                </View>
                 <Text style={styles.textTime}>{textDay}</Text>
             </View>
 
-            {info.role === 'admin' && <TouchableOpacity>
+            {info.role === 'admin' && <TouchableOpacity onPress={onPress}>
                 <Icon name="trash" color={Color.ui_blue_10} size={20} />
             </TouchableOpacity>}
         </View>
@@ -48,6 +58,8 @@ const styles = StyleSheet.create({
     textCmt: {
         paddingTop: 10,
         textAlign: 'justify',
+        fontSize: 16,
+        color: Color.ui_black_10,
         width: 280,
     },
     textTime: {
@@ -55,6 +67,7 @@ const styles = StyleSheet.create({
         color: Color.ui_grey_20,
         fontWeight: 'bold',
         paddingTop: 5,
+        fontSize: 12,
     },
     textName: {
         color: Color.ui_black_10,
