@@ -4,7 +4,7 @@
 
     const reducers = combineReducers({
         personalInfo: info,
-        checkInfo: check
+        checkInfo: check,
     });
 
     export default (state, action) => reducers(state, action);

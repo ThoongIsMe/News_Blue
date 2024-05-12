@@ -11,7 +11,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { getFavoritesFromApiAsync, getHeartsFromApiAsync } from '../../helper/api';
 import uuid from 'react-native-uuid';
 import Url from '../../constants/Url';
-
 Sound.setCategory('Playback');
 interface Favorites {
     id: string;
@@ -441,6 +440,15 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: Color.ui_grey_20,
         padding: 5,
+    },
+    lotte: {
+        justifyContent: 'center',
+        alignContent: 'center',
+        backgroundColor: Color.ui_grey_10,
+        zIndex: 1,
+    }, loading: {
+        width: 200,
+        height: 200,
     },
 });
 

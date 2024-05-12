@@ -12,7 +12,7 @@ import FormatTimeAgo from '../../constants/time';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Url from '../../constants/Url';
 import uuid from 'react-native-uuid';
-import { Keyboard } from 'react-native'
+import { Keyboard } from 'react-native';
 
 
 interface Comments {

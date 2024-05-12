@@ -178,7 +178,7 @@ function ManagerNews({ navigation }: any) {
     };
 
     const handleArticlePress = (article: Article) => {
-        navigation.navigate("AddNews", { article });
+        navigation.navigate("UpdateNews", { article });
     }
 
     const sortedFilteredArticles = [...articles].sort((a, b) => {
