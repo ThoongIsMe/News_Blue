@@ -10,7 +10,7 @@ import Container from '../../components/Container';
 import Icon from 'react-native-vector-icons/Ionicons';
 import sendMail from '../../helper/sendEmail';
 
-
+import Url from '../../constants/Url';
 function ScreemForgotPass({ navigation }: any): React.ReactElement {
     const [valueEmail, setTextEmail] = useState('');
     const handleInputEmailChange = (email: string) => {
@@ -18,7 +18,7 @@ function ScreemForgotPass({ navigation }: any): React.ReactElement {
     };
 
     async function getPassAPI(email: string) {
-        const apiUrl = `http://192.168.4.102:3030/users?email=${email}`;
+        const apiUrl = `http://${Url.IP_WF}:${Url.PORT}/users?email=${email}`;
 
         try {
             const response = await fetch(apiUrl);
@@ -40,16 +40,16 @@ function ScreemForgotPass({ navigation }: any): React.ReactElement {
 
 
     const handlePress = () => {
-        // getPassAPI(valueEmail)
-        //     .then((password: string) => {
-        //         if (password !== null) {
-        //             sendMail(valueEmail, password);
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.error('Error handling press:', error);
-        //         // Xử lý lỗi khi không thể lấy mật khẩu từ API
-        //     });
+        getPassAPI(valueEmail)
+            .then((password: string) => {
+                if (password !== null) {
+                    sendMail(valueEmail, password);
+                }
+            })
+            .catch(error => {
+                console.error('Error handling press:', error);
+                // Xử lý lỗi khi không thể lấy mật khẩu từ API
+            });
     }
 
     return (
