@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         backgroundColor: Color.ui_grey_10,
         zIndex: 1,
-        paddingLeft: 90,
+        paddingLeft: 103,
     }, loading: {
         width: 200,
         height: 200,

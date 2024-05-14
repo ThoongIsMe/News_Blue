@@ -12,10 +12,12 @@ import { Provider } from 'react-redux';
 import { store } from '../redux/store';
 import StackAppSave from './StackAppSave';
 import StackAppSearch from './StackAppSearch';
-
-
+// import Load from '../screems/HomeScreems/load';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+// import { useDispatch, useSelector } from 'react-redux';
+// import { useEffect, useState } from 'react';
+
 
 function App() {
     const TabBarIcon = ({ size, color }: any) => (
@@ -36,6 +38,14 @@ function App() {
         <Icon name="person" size={size} color={color} />
     );
 
+
+    // const check = useSelector((state: any) => state.checkInfo);
+    // const [key, setKey] = useState(0); // Key state
+    // useEffect(() => {
+    //     setKey(prevKey => prevKey + 1); // Increment key whenever checkLoad changes
+    //     console.log(check);
+    // }, [check, key]);
+
     return (
         <Tab.Navigator
             screenOptions={{
@@ -51,6 +61,7 @@ function App() {
                 component={StackAppNavigatorr}
                 options={({ route }) => {
                     const focusedRouteName = getFocusedRouteNameFromRoute(route) || '';
+
                     if (!['ReadNews', 'Comments'].includes(focusedRouteName)) {
                         return {
                             tabBarStyle: { display: 'flex' },
@@ -107,7 +118,7 @@ function App() {
                 component={StackAppUserr}
                 options={({ route }) => {
                     const focusedRouteName = getFocusedRouteNameFromRoute(route) || '';
-                    if (!['Contact', 'PasswordChange', 'Security', 'Profile', 'ManagerNews', 'AddCategories', 'AddNews', 'DeleteAccount'].includes(focusedRouteName)) {
+                    if (!['Contact', 'PasswordChange', 'Security', 'Profile', 'ManagerNews', 'AddCategories', 'AddNews', 'DeleteAccount', 'UpdateNews', 'ManagerAccounts'].includes(focusedRouteName)) {
                         return {
                             tabBarStyle: { display: 'flex' },
                             tabBarIcon: TabBarIconUser, // Pass the Icon component as props
@@ -122,6 +133,7 @@ function App() {
 
         </Tab.Navigator>
     );
+
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
