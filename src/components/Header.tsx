@@ -12,8 +12,8 @@ const Header = () => {
         }}>
             <TouchableOpacity>
                 <Image
-                    source={require('../assets/icon/menu.png')}
-                    style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
+                    source={require('../assets/images/logoNews.jpg')}
+                    style={{ width: 35, height: 35, borderRadius: 15, marginRight: 10 }}
                 />
             </TouchableOpacity>
 
