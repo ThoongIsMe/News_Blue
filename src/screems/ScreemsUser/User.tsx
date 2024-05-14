@@ -91,8 +91,8 @@ function UserScreen(): React.JSX.Element {
 
                     <View style={{ paddingVertical: 20 }}>
                         <Text style={styles.title}>Thêm báo mới</Text>
-                        <BtnSetting onPress={handleAddNews} icon={'add-circle-outline'} namebtn={'Thêm chủ đề mới'} />
-                        <BtnSetting onPress={handleAddCategories} icon={'add-circle-outline'} namebtn={'Thêm bài báo mới'} />
+                        <BtnSetting onPress={handleAddNews} icon={'add-circle-outline'} namebtn={'Thêm bài báo mới'} />
+                        <BtnSetting onPress={handleAddCategories} icon={'add-circle-outline'} namebtn={'Thêm chủ đề mới'} />
                     </View>
                 </>
             )}
