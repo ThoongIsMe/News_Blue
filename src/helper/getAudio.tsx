@@ -11,7 +11,7 @@ async function getAudio(context: string): Promise<AudioResponse> {
         method: "POST",
         headers: {
             //'api-key': 'pzmj9mjM3U1BUDM0BYvUZuK6hKyTdNSc',
-            'api-key': 'OfYPrJCXglKKX3C0cnvRzCI0TQYWyBBr',
+            'api-key': 'pQJydq3ZLEJKMNHjEEBC3ZSRmkOq9pQp',
 
             'speed': '1',
             'voice': 'banmai',

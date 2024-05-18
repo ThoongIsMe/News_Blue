@@ -231,6 +231,7 @@ function Comments({ route }: any) {
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
                     {comments.map(comment => {
                         const infos = getUserFromCommentId(comment.userID);
+                        const check = (info.role === 'admin' || info.id === comment.userID);
                         return (
                             article.id === comment.articleID &&
                             <Cmt
@@ -240,7 +241,9 @@ function Comments({ route }: any) {
                                 textName={infos ? `${infos.firstName} ${infos.lastName}` : ''}
                                 textCmt={comment.content}
                                 textDay={FormatTimeAgo(comment.createdAt)}
-                                imgCmt={comment.image} />
+                                imgCmt={comment.image}
+                                check={check}
+                                />
                         );
                     })}
                 </ScrollView>

@@ -15,10 +15,10 @@ interface CmtProps {
     textDay: string;
     imgCmt: string;
     onPress: () => void;
-
+    check:boolean,
 }
 
-const Cmt: React.FC<CmtProps> = ({ onPress, img, textName, textCmt, textDay, imgCmt }) => {
+const Cmt: React.FC<CmtProps> = ({ onPress, img, textName, textCmt, textDay, imgCmt,check }) => {
     const info = useSelector((state: any) => state.personalInfo);
 
     return (
@@ -41,7 +41,7 @@ const Cmt: React.FC<CmtProps> = ({ onPress, img, textName, textCmt, textDay, img
                 <Text style={styles.textTime}>{textDay}</Text>
             </View>
 
-            {info.role === 'admin' && <TouchableOpacity onPress={onPress}>
+            {check && <TouchableOpacity onPress={onPress}>
                 <Icon name="trash" color={Color.ui_blue_10} size={20} />
             </TouchableOpacity>}
         </View>

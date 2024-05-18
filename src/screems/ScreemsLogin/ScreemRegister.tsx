@@ -150,7 +150,7 @@ function ScreemRegister({ navigation }: any): React.ReactElement {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : undefined}
             keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}>
-            <ScrollView>
+            <ScrollView style={{backgroundColor:'white', height:'100%'}}>
                 <Container>
                     <View style={{ marginLeft: -10 }}>
                         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -167,13 +167,13 @@ function ScreemRegister({ navigation }: any): React.ReactElement {
                     <InputText
                         handleInputChange={handleInputFirstNameChange}
                         value={valueFirstName}>
-                        First name
+                        Tên
                     </InputText>
 
                     <InputText
                         handleInputChange={handleInputLastNameChange}
                         value={valueLastName}>
-                        Last name
+                        Họ
                     </InputText>
 
                     <InputText
@@ -187,7 +187,7 @@ function ScreemRegister({ navigation }: any): React.ReactElement {
                         handleInputChange={handleInputPassChange}
                         value={valuePass}
                         secureTextEntry={getPassVisible ? false : true}>
-                        Password
+                        Mật khẩu
                     </InputText>
                     <View style={{ alignItems: 'flex-end', marginTop: -40 }}>
                         {getPassVisible ?
@@ -208,7 +208,7 @@ function ScreemRegister({ navigation }: any): React.ReactElement {
                         handleInputChange={handleInputComfirmPassChange}
                         value={valueComfirmPass}
                         secureTextEntry={getPassVisible1 ? false : true}>
-                        Comfirm Password
+                        Mật khẩu xác nhận
                     </InputText>
                     <View style={{ alignItems: 'flex-end', marginTop: -40 }}>
                         {getPassVisible1 ?
@@ -224,7 +224,7 @@ function ScreemRegister({ navigation }: any): React.ReactElement {
 
                     <View style={styles.btnSubmit}>
                         <PrimaryButton onPress={handlePress} color={Color.ui_blue_10} height={50} width={200} borderRadius={20}>
-                            Get Password
+                            Đăng ký
                         </PrimaryButton>
                     </View>
 
@@ -236,9 +236,6 @@ function ScreemRegister({ navigation }: any): React.ReactElement {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
     img: {
         marginTop: 10,
         justifyContent: 'center',

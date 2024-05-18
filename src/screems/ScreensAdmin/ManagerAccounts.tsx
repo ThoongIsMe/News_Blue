@@ -9,6 +9,7 @@ import { getUserFromApiAsync } from '../../helper/api';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ShowUser from '../../components/ShowUser';
 import { useFocusEffect } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 
 interface Users {
@@ -25,7 +26,7 @@ function ManagerAccounts({ navigation }: any) {
 
     const [user, setUser] = useState<Users[]>([]);
     const [valueSearch, setValueSearch] = useState('');
-
+    const info = useSelector((state: any) => state.personalInfo);
     const handleInputSearch = (valueSearch: string) => {
         setValueSearch(valueSearch);
     };
@@ -89,12 +90,15 @@ function ManagerAccounts({ navigation }: any) {
                 <Text style={styles.title}>Quản lý chung</Text>
 
                 {user.map((u, index) => (
-                    <ShowUser
-                        key={index}
-                        onPress={() => handleManagerAccount(u)}
-                        namebtn={`${u.firstName} ${u.lastName}`}
-                        imageSource={u.image}
-                        user={u} />
+                    u.id !== info.id ? (
+                        <ShowUser
+                            key={index}
+                            onPress={() => handleManagerAccount(u)}
+                            namebtn={`${u.firstName} ${u.lastName}`}
+                            imageSource={u.image}
+                            user={u}
+                        />
+                    ) : null
                 ))}
 
             </View>

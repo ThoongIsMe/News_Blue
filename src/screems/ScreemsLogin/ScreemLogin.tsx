@@ -12,6 +12,7 @@ import { getUserFromApiAsync } from '../../helper/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateTTUser } from '../../redux/actions/updateAction';
 import { store } from '../../redux/store';
+import { useFocusEffect } from '@react-navigation/native';
 
 // chuyển useDispatch -> useAppDispatch type store
 export type AppDispatch = typeof store.dispatch;
@@ -52,6 +53,20 @@ function ScreemLogin({ navigation }: any): React.ReactElement {
 
     }, [info]);
 
+    useFocusEffect(
+        React.useCallback(() => {
+            const fetchData = async () => {
+                try {
+                    const userData = await getUserFromApiAsync();
+                    setUser(userData);
+                } catch (error) {
+                    console.error("Error fetching user:", error);
+                }
+            };
+            console.log("Info", info);
+            fetchData();
+        }, [info])
+    );
 
 
     const handleInputEmailChange = (email: string) => {
@@ -106,7 +121,7 @@ function ScreemLogin({ navigation }: any): React.ReactElement {
                 value={valuePass}
                 secureTextEntry={getPassVisible ? false : true}
                 placeholderText="password">
-                Password
+                Mật khẩu
             </InputText>
 
 
@@ -123,19 +138,19 @@ function ScreemLogin({ navigation }: any): React.ReactElement {
             </View>
 
             <TouchableOpacity style={styles.btnForgot} onPress={handlePressForgot}>
-                <Text style={styles.textForgot}>Forgot password</Text>
+                <Text style={styles.textForgot}>Quên mật khẩu</Text>
             </TouchableOpacity>
 
             <View style={styles.btnSubmit}>
                 <PrimaryButton onPress={handlePressLogin} color={Color.ui_blue_10} height={50} width={200} borderRadius={20}>
-                    Submit
+                    Đăng nhập
                 </PrimaryButton>
             </View>
 
             <View style={styles.btnRegister}>
-                <Text>Don't have an account? </Text>
+                <Text>Bạn chưa có tài khoản? </Text>
                 <TouchableOpacity onPress={handlePressRegister}>
-                    <Text style={styles.textForgot}>Register</Text>
+                    <Text style={styles.textForgot}>Đăng ký</Text>
                 </TouchableOpacity>
             </View>
 
