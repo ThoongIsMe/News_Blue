@@ -299,12 +299,12 @@ function HomeNews({ navigation }: any): React.JSX.Element {
 const styles = StyleSheet.create({
 
     item: {
-        width: 80,
+        width: 90,
         marginRight: 10,
         backgroundColor: Color.ui_white_10,
         paddingHorizontal: 10,
         marginBottom: 10,
-        paddingTop: 10
+        paddingTop: 10,
     },
     text: {
         color: Color.ui_black_10,

@@ -76,7 +76,7 @@ function ScreemForgotPass({ navigation }: any): React.ReactElement {
 
             <View style={styles.btnSubmit}>
                 <PrimaryButton onPress={handlePress} color={Color.ui_blue_10} height={50} width={200} borderRadius={20}>
-                    Get Password
+                    Lấy mật khẩu
                 </PrimaryButton>
             </View>
 

@@ -183,14 +183,14 @@ function UpdateNews({ navigation, route }: any) {
 
     
     return (
-        <ScrollView>
+        <ScrollView style={{backgroundColor:'white', height:'100%'}}>
             <Container>
 
                 <View style={styles.ViewText}>
                     <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack()}>
                         <Icon name="chevron-back" color={Color.ui_blue_10} size={30} />
                     </TouchableOpacity>
-                    <Text style={styles.Text}>Thêm chủ đề mới</Text>
+                    <Text style={styles.Text}>Chỉnh sửa bài báo</Text>
                     <View style={styles.ViewText}>
                         <Text style={styles.text}>Thông tin bài báo</Text>
                     </View>
