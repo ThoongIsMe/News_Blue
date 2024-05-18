@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Color from '../constants/Colors'
-import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 // Trong ScreemsUser/User.tsx
@@ -19,8 +18,6 @@ interface CmtProps {
 }
 
 const Cmt: React.FC<CmtProps> = ({ onPress, img, textName, textCmt, textDay, imgCmt,check }) => {
-    const info = useSelector((state: any) => state.personalInfo);
-
     return (
         <View style={styles.item}>
             {img != '' ? <Image
